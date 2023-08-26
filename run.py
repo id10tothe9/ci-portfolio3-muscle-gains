@@ -56,8 +56,14 @@ def get_user_input(message, requirements_list):
 
 def main_menu():
   message = main_menu_message()
-  user_input = get_user_input(message, ['integer', (1, 3)])    
-  print(f'\nYour input is {user_input}\n')
+  user_input = get_user_input(message, ['integer', (1, 3)])
+  if user_input == 1:
+    create_training_table()
+  elif user_input == 2:
+    print_training_table()
+  elif user_input == 3:
+    print_calculated_values()
+
 
 def main():
   print(welcome_message())
