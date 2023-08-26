@@ -53,6 +53,44 @@ def get_user_input(message, requirements_list):
       break
   return user_input
 
+"""Conceptual design of the data structure and functions"""
+# Exercise:
+#   A class who's objects contain the data of one single row
+#   (e.g. exercise_name, reps, weight etc)
+
+# MuscleGroup:
+#   A class who's objects describe one muscle group.
+#   It contains several exercise objects belonging to a single
+#   muscle group.
+#   Methods():
+#     calculate_volume(), calculate_tut()
+
+def create_training_table():
+  """
+  """
+  # if a training table already exists, ask user if they're sure
+  #   they want to delete the current table and construct a new one
+  #   If user says yes, delete all current objects and data first.
+
+  # construct database to contain muscle groups:
+  muscle_groups = {}
+  # ask user "enter a new muscle group or choose an existent group"
+  # get group name
+  # construct group
+  create_muscle_group(muscle_groups) # constructs an object of MuscleGroup with user input
+    
+  # add new group to list of groups
+  groups.append()
+  # get exercise name and rest of the data
+  # choice: add another row?
+  # choice: same group / different group?
+  # if different group -> choose an existent group or enter a new one
+
+def create_muscle_group(muscle_groups):
+  if muscle_groups == {}:
+    message = 'Please enter a new muscle group name'
+    group_name = get_user_input(message, ['text'])
+
 
 def main_menu():
   message = main_menu_message()
