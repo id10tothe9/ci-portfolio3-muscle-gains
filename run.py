@@ -7,7 +7,7 @@ def main_menu_message():
   return """Choose an option:
   1. Create a new training plan
   2. Display current training plan
-  3. Display calculated values\n"""
+  3. Display calculated values\n\n"""
 
 
 def check_input(user_input, requirements_list):
@@ -18,24 +18,24 @@ def check_input(user_input, requirements_list):
   response, otherwise it returns an empty string.
   """
   for req in requirements_list:
-        if req == 'integer':
-            try:
-                user_input = int(user_input)
-            except ValueError:
-                return 'Please enter an integer.'
+    if req == 'integer':
+      try:
+        user_input = int(user_input)
+      except ValueError:
+        return '\nPlease enter an integer.\n'
 
-        elif req == 'positive float':
-            try:
-                user_input = float(user_input)
-                if user_input < 0:
-                    raise ValueError
-            except ValueError:
-                return 'Please enter a positive floating number'
+    elif req == 'positive float':
+      try:
+        user_input = float(user_input)
+        if user_input < 0:
+          raise ValueError
+      except ValueError:
+        return '\nPlease enter a positive floating number\n'
 
-        elif type(req) == tuple and (user_input < req[0] or user_input > req[1]):
-                return f'Please enter a value between {req[0]} and {req[1]}'
+    elif type(req) == tuple and (user_input < req[0] or user_input > req[1]):
+      return f'\nPlease enter a value between {req[0]} and {req[1]}\n'
 
-    return ''
+  return ''
 
 
 def get_user_input(message, requirements_list):
@@ -56,9 +56,12 @@ def get_user_input(message, requirements_list):
 
 def main_menu():
   message = main_menu_message()
-  user_input = get_user_input(message, ['integer', (1, 3)])
-
+  user_input = get_user_input(message, ['integer', (1, 3)])    
+  print(f'\nYour input is {user_input}\n')
 
 def main():
   print(welcome_message())
   main_menu()
+
+
+main()
