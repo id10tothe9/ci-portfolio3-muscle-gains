@@ -10,6 +10,34 @@ def main_menu_message():
   3. Display calculated values\n"""
 
 
+def check_input(user_input, requirements_list):
+  """
+  This function takes in the user_input and a list of requirements
+  the input must fulfil. Depending on the requirements list, it checks
+  if the input is valid. If it's not valid it returns an appropriate
+  response, otherwise it returns an empty string.
+  """
+  for req in requirements_list:
+        if req == 'integer':
+            try:
+                user_input = int(user_input)
+            except ValueError:
+                return 'Please enter an integer.'
+
+        elif req == 'positive float':
+            try:
+                user_input = float(user_input)
+                if user_input < 0:
+                    raise ValueError
+            except ValueError:
+                return 'Please enter a positive floating number'
+
+        elif type(req) == tuple and (user_input < req[0] or user_input > req[1]):
+                return f'Please enter a value between {req[0]} and {req[1]}'
+
+    return ''
+
+
 def get_user_input(message, requirements_list):
   """
   Handle all input requests: print out message to user, check
