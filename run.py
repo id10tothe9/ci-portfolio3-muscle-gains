@@ -65,7 +65,7 @@ def get_user_input(message, requirements_list):
 #   Methods():
 #     calculate_volume(), calculate_tut()
 
-def create_training_table():
+def create_training_plan():
   """
   """
   # if a training table already exists, ask user if they're sure
@@ -77,28 +77,29 @@ def create_training_table():
   # ask user "enter a new muscle group or choose an existent group"
   # get group name
   # construct group
-  create_muscle_group(muscle_groups) # constructs an object of MuscleGroup with user input
+  muscle_group = create_muscle_group(muscle_groups) # constructs an object of MuscleGroup with user input
     
-  # add new group to list of groups
-  groups.append()
+  # add new group to dictionary:
+  muscle_groups[muscle_group.name] = muscle_group
   # get exercise name and rest of the data
   # choice: add another row?
   # choice: same group / different group?
   # if different group -> choose an existent group or enter a new one
 
 def create_muscle_group(muscle_groups):
-  if muscle_groups == {}:
-    message = 'Please enter a new muscle group name'
-    group_name = get_user_input(message, ['text'])
+  message = 'Please enter a new muscle group name'
+  group_name = get_user_input(message, ['text'])
+  muscle_group = MuscleGroup(group_name) # constructs an object muscle_group with name group_name
+  return muscle_group
 
 
 def main_menu():
   message = main_menu_message()
   user_input = get_user_input(message, ['integer', (1, 3)])
   if user_input == 1:
-    create_training_table()
+    create_training_plan()
   elif user_input == 2:
-    print_training_table()
+    print_training_plan()
   elif user_input == 3:
     print_calculated_values()
 
