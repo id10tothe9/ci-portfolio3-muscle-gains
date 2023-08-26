@@ -72,7 +72,7 @@ def create_training_plan():
   #   they want to delete the current table and construct a new one
   #   If user says yes, delete all current objects and data first.
 
-  # construct database to contain muscle groups:
+  # construct plan database to contain all muscle groups:
   muscle_groups = {}
   # ask user "enter a new muscle group or choose an existent group"
   # get group name
@@ -93,6 +93,8 @@ def create_muscle_group(muscle_groups):
   muscle_group = MuscleGroup(group_name) # constructs an object muscle_group with name group_name
   return muscle_group
 
+def create_exercise():
+
 
 class MuscleGroup(name):
   """
@@ -110,6 +112,16 @@ class MuscleGroup(name):
     A method to calculate volume of the muscle group
     """
     return
+
+
+class Exercise(name):
+  """
+  A Class who's objects represent one row of the training plan.
+  Each Object contains name of the exercise and its relevant metrics.
+  Each Exercise object belongs to a unique MuscleGroup.
+  """
+  def __init__(self, name):
+    self.name = name
 
 
 
