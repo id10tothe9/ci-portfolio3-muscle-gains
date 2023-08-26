@@ -88,9 +88,29 @@ def create_training_plan():
 
 def create_muscle_group(muscle_groups):
   message = 'Please enter a new muscle group name'
-  group_name = get_user_input(message, ['text'])
+  group_name = get_user_input(message, [''])
+  # add functionality to check whether group  name already exists..
   muscle_group = MuscleGroup(group_name) # constructs an object muscle_group with name group_name
   return muscle_group
+
+
+class MuscleGroup(name):
+  """
+  A class that contains all exercise rows which belong to a given muscle group
+  """
+  def __init__(self, name):
+    self.name = name
+    self.exercises = {} # MuscleGroup contains a dictionary of exercises
+  
+  def add_exercise(self, exercise):
+    self.exercises[exercise.name] = exercise
+  
+  def calc_vol():
+    """
+    A method to calculate volume of the muscle group
+    """
+    return
+
 
 
 def main_menu():
