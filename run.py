@@ -99,13 +99,17 @@ def create_muscle_group(muscle_groups):
 def create_exercise():
 
 
-class MuscleGroup(name):
+class MuscleGroup():
   """
   A class that contains all exercise rows which belong to a given muscle group
   """
-  def __init__(self, name):
-    self.name = name
+  def __init__(self):
+    self.name = ''
     self.exercises = {} # MuscleGroup contains a dictionary of exercises
+  
+  def get_name(self, name):
+    message = 'Enter name of the muscle group'
+    self.name = get_user_input(message, [''])
   
   def add_exercise(self, exercise):
     self.exercises[exercise.name] = exercise
