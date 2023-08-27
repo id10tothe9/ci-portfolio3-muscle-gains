@@ -74,14 +74,17 @@ def create_training_plan():
 
   # construct plan database to contain all muscle groups:
   muscle_groups = {}
-  # ask user "enter a new muscle group or choose an existent group"
+  # ask user to "enter a new muscle group or choose an existent group"
   # get group name
-  # construct group
+  # construct basic muscle group object
   muscle_group = create_muscle_group(muscle_groups) # constructs an object of MuscleGroup with user input
     
   # add new group to dictionary:
   muscle_groups[muscle_group.name] = muscle_group
-  # get exercise name and rest of the data
+  # get exercises and rest of the data for this group
+  exercise = create_exercise()
+  muscle_group.add_exercise() = 
+
   # choice: add another row?
   # choice: same group / different group?
   # if different group -> choose an existent group or enter a new one
@@ -89,7 +92,7 @@ def create_training_plan():
 def create_muscle_group(muscle_groups):
   message = 'Please enter a new muscle group name'
   group_name = get_user_input(message, [''])
-  # add functionality to check whether group  name already exists..
+  # add functionality to check whether group name already exists..
   muscle_group = MuscleGroup(group_name) # constructs an object muscle_group with name group_name
   return muscle_group
 
@@ -114,14 +117,32 @@ class MuscleGroup(name):
     return
 
 
-class Exercise(name):
+class Exercise():
   """
   A Class who's objects represent one row of the training plan.
   Each Object contains name of the exercise and its relevant metrics.
   Each Exercise object belongs to a unique MuscleGroup.
   """
-  def __init__(self, name):
-    self.name = name
+  def __init__(self):
+    self.name = ''
+    self.sets = ''
+    self.reps_and_weights = []
+
+  def get_name(self):
+    message = 'Enter name of the exercise'
+    self.name = get_user_input(message, [''])
+  
+  def get_sets(self):
+    message = 'How many sets?'
+    self.sets = get_user_input(message, ['integer'])
+
+  def get_reps_and_weights(self):
+    for set in range(sets):
+      message = f'How many reps in set Nr. {set+1}'
+      reps = get_user_input(message, ['integer'])
+      message = f'Which weight for set Nr. {set+1}'
+      weight = get_user_input(message, ['positive float'])
+      self.reps_and_weights.append([reps, weight])
 
 
 
