@@ -17,12 +17,14 @@ def check_input(user_input, requirements_list):
   if the input is valid. If it's not valid it returns an appropriate
   response, otherwise it returns an empty string.
   """
+  error_message = ''
   for req in requirements_list:
     if req == 'integer':
       try:
         user_input = int(user_input)
       except ValueError:
-        return '\nPlease enter an integer.\n'
+        error_message = '\nPlease enter an integer.\n'
+        break
 
     elif req == 'positive float':
       try:
@@ -30,12 +32,14 @@ def check_input(user_input, requirements_list):
         if user_input < 0:
           raise ValueError
       except ValueError:
-        return '\nPlease enter a positive floating number\n'
+        error_message = '\nPlease enter a positive floating number\n'
+        break
 
     elif type(req) == tuple and (user_input < req[0] or user_input > req[1]):
-      return f'\nPlease enter a value between {req[0]} and {req[1]}\n'
+      error_message = f'\nPlease enter a value between {req[0]} and {req[1]}\n'
+      break
 
-  return ''
+  return user_input, error_message
 
 
 def get_user_input(message, requirements_list):
@@ -46,7 +50,7 @@ def get_user_input(message, requirements_list):
   """
   while True:
     user_input = input(message)
-    error_message = check_input(user_input, requirements_list)
+    user_input, error_message = check_input(user_input, requirements_list)
     if error_message:
       print(error_message)
     else:
@@ -80,7 +84,8 @@ def create_training_plan():
   group = get_group(muscle_groups)
   group.add_exercise(get_exercise())
   muscle_groups[group.name] = group # add new group to dictionary
-
+  print(group.name, group.exercises)
+  print(muscle_groups)
   # choice: add another row?
   # choice: same group / different group?
   # if different group -> choose an existent group or enter a new one
@@ -124,8 +129,8 @@ class MuscleGroup():
     self.name = ''
     self.exercises = {} # MuscleGroup contains a dictionary of exercises
   
-  def get_name(self, name):
-    message = 'Enter name of the muscle group'
+  def get_name(self):
+    message = 'Enter name of the muscle group\n'
     self.name = get_user_input(message, [''])
   
   def add_exercise(self, exercise):
@@ -150,18 +155,18 @@ class Exercise():
     self.reps_and_weights = []
 
   def get_name(self):
-    message = 'Enter name of the exercise'
+    message = 'Enter name of the exercise\n'
     self.name = get_user_input(message, [''])
   
   def get_sets(self):
-    message = 'How many sets?'
+    message = 'How many sets?\n'
     self.sets = get_user_input(message, ['integer'])
 
   def get_reps_and_weights(self):
-    for set in range(sets):
-      message = f'How many reps in set Nr. {set+1}'
+    for set in range(self.sets):
+      message = f'How many reps in set Nr. {set+1}\n'
       reps = get_user_input(message, ['integer'])
-      message = f'Which weight for set Nr. {set+1}'
+      message = f'Which weight for set Nr. {set+1}\n'
       weight = get_user_input(message, ['positive float'])
       self.reps_and_weights.append([reps, weight])
 
