@@ -77,24 +77,35 @@ def create_training_plan():
   # ask user to "enter a new muscle group or choose an existent group"
   # get group name
   # construct basic muscle group object
-  muscle_group = create_muscle_group(muscle_groups) # constructs an object of MuscleGroup with user input
-    
-  # add new group to dictionary:
-  muscle_groups[muscle_group.name] = muscle_group
-  # get exercises and rest of the data for this group
-  exercise = create_exercise()
-  muscle_group.add_exercise() = 
+  group = get_group(muscle_groups)
+  group.add_exercise(get_exercise())
+  muscle_groups[group.name] = group # add new group to dictionary
 
   # choice: add another row?
   # choice: same group / different group?
   # if different group -> choose an existent group or enter a new one
 
-def create_muscle_group(muscle_groups):
-  message = 'Please enter a new muscle group name'
-  group_name = get_user_input(message, [''])
-  # add functionality to check whether group name already exists..
-  muscle_group = MuscleGroup(group_name) # constructs an object muscle_group with name group_name
-  return muscle_group
+
+def get_group(muscle_groups):
+  if muscle_groups != {}:
+    i = 1
+    group_names = []
+    message = 'Choose an option to enter a new muscle group or use an exsistent one:\n'
+    message += f'{i}. New muscle group\n'
+    for group in muscle_groups:
+      i += 1
+      group_names.append(group.name)
+      message += f'{i}. {group.name}\n'
+    user_input = get_user_input(message, ['integer', (1, i)])
+    if user_input == 1:
+      group = MuscleGroup()
+      group.get_name()
+    else:
+      group = muscle_groups[group_names[i-2]]
+  else:
+    group = MuscleGroup()
+    group.get_name()
+  return group
 
 
 def get_exercise():
