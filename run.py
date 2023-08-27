@@ -1,10 +1,10 @@
 
 def welcome_message():
-  return "Welcome!\n"
+  return "Welcome!"
 
 
 def main_menu_message():
-  return """Choose an option:
+  return """\nChoose an option:
   1. Create a new training plan
   2. Display current training plan
   3. Display calculated values\n\n"""
@@ -79,6 +79,8 @@ def create_training_plan():
   # choice: add another row?
   # choice: same group / different group?
   # if different group -> choose an existent group or enter a new one
+
+  return muscle_groups
 
 
 def get_group(muscle_groups):
@@ -163,14 +165,18 @@ class Exercise():
 
 
 def main_menu():
-  message = main_menu_message()
-  user_input = get_user_input(message, ['integer', (1, 3)])
-  if user_input == 1:
-    training_plan = create_training_plan()
-  elif user_input == 2:
-    print_training_plan()
-  elif user_input == 3:
-    print_calculated_values()
+  while True:
+    global training_plan
+    message = main_menu_message()
+    user_input = get_user_input(message, ['integer', (1, 3)])
+    if user_input == 1:
+      training_plan = create_training_plan()
+    elif user_input == 2:
+      print(training_plan)
+      # print_training_plan()
+    elif user_input == 3:
+      print_calculated_values()
+    input('Press Enter to return to main menu')
 
 
 def main():
@@ -178,4 +184,6 @@ def main():
   main_menu()
 
 
+
+training_plan = {}
 main()
