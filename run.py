@@ -96,7 +96,13 @@ def create_muscle_group(muscle_groups):
   muscle_group = MuscleGroup(group_name) # constructs an object muscle_group with name group_name
   return muscle_group
 
-def create_exercise():
+
+def get_exercise():
+  exercise = Exercise()
+  exercise.get_name()
+  exercise.get_sets()
+  exercise.get_reps_and_weights()
+  return exercise
 
 
 class MuscleGroup():
