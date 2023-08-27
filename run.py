@@ -57,20 +57,11 @@ def get_user_input(message, requirements_list):
       break
   return user_input
 
-"""Conceptual design of the data structure and functions"""
-# Exercise:
-#   A class who's objects contain the data of one single row
-#   (e.g. exercise_name, reps, weight etc)
-
-# MuscleGroup:
-#   A class who's objects describe one muscle group.
-#   It contains several exercise objects belonging to a single
-#   muscle group.
-#   Methods():
-#     calculate_volume(), calculate_tut()
 
 def create_training_plan():
   """
+  This function starts creating a new training plan. If an old plan
+  exists, it asks the user for confirmation to delete previous data.
   """
   # if a training table already exists, ask user if they're sure
   #   they want to delete the current table and construct a new one
@@ -84,8 +75,7 @@ def create_training_plan():
   group = get_group(muscle_groups)
   group.add_exercise(get_exercise())
   muscle_groups[group.name] = group # add new group to dictionary
-  print(group.name, group.exercises)
-  print(muscle_groups)
+
   # choice: add another row?
   # choice: same group / different group?
   # if different group -> choose an existent group or enter a new one
@@ -176,7 +166,7 @@ def main_menu():
   message = main_menu_message()
   user_input = get_user_input(message, ['integer', (1, 3)])
   if user_input == 1:
-    create_training_plan()
+    training_plan = create_training_plan()
   elif user_input == 2:
     print_training_plan()
   elif user_input == 3:
