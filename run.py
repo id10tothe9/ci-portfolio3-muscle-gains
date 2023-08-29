@@ -43,6 +43,22 @@ def check_input(user_input, requirements_list):
         elif type(req) == tuple and (user_input < req[0] or user_input > req[1]):
             error_message = f'\nPlease enter a value between {req[0]} and {req[1]}\n'
             break
+
+        elif req == 'yes or no':
+            try:
+                user_input = user_input.lower()
+                if len(user_input) > 3: # random strings that might contain yes or no are not valid
+                    raise error                
+                elif user_input.find('yes') > -1:
+                    user_input = 'yes'
+                elif user_input.find('no') > -1:
+                    user_input = 'no'
+                else:
+                    raise error
+            except error:
+                error_message = "Please enter a 'yes' or 'no' answer."
+                break
+
         
         elif req == 'cadence': # input format required '2 4 5' or e.g. '2,4, 5'
             user_input, error_message = get_cadence_values(user_input)
@@ -107,39 +123,45 @@ def create_training_plan():
     # if a training table already exists, ask user if they're sure
     #   they want to delete the current table and construct a new one
     #   If user says yes, delete all current objects and data first.
-
-    # construct plan database to contain all muscle groups:
-    muscle_groups = {}
+    global training_plan
     # ask user to "enter a new muscle group or choose an existent group"
     # get group name
     # construct basic muscle group object
-    group = get_group(muscle_groups)
-    group.add_exercise(get_exercise())
-    muscle_groups[group.name] = group # add new group to dictionary
+    while True:
+        group = get_group(training_plan)
+        group.add_exercise(get_exercise())
+        training_plan[group.name] = group # add new group to dictionary
 
+        """
+        Continue looping to add more exercises until user is done.
+        """
+        message = "Do you want to add another exercise? Please type 'yes' or 'no'.\n"
+        user_input = get_user_input(message, ['yes or no'])
+        if user_input == 'no':
+            break
     # choice: add another row?
     # choice: same group / different group?
     # if different group -> choose an existent group or enter a new one
 
-    return muscle_groups
+    return
 
 
-def get_group(muscle_groups):
-    if muscle_groups != {}:
+def get_group(training_plan):
+    if training_plan != {}:
         i = 1
         group_names = []
         message = 'Choose an option to enter a new muscle group or use an exsistent one:\n'
         message += f'{i}. New muscle group\n'
-        for group in muscle_groups:
+        for group_name in training_plan:
             i += 1
-            group_names.append(group.name)
-            message += f'{i}. {group.name}\n'
+            group_names.append(group_name)
+            message += f'{i}. {group_name}\n'
         user_input = get_user_input(message, ['positive integer', (1, i)])
         if user_input == 1:
             group = MuscleGroup()
             group.get_name()
         else:
-            group = muscle_groups[group_names[i-2]]
+            group = training_plan[group_names[i-2]]
     else:
         group = MuscleGroup()
         group.get_name()
@@ -219,6 +241,9 @@ class Exercise():
         self.rest = get_user_input(message, ['positive integer'])
 
 
+def print_training_plan():
+    global training_plan
+    
 
 
 
@@ -230,8 +255,10 @@ def main_menu():
         if user_input == 1:
             training_plan = create_training_plan()
         elif user_input == 2:
-            print(training_plan)
-            # print_training_plan()
+            if training_plan == {}:
+                print("Sorry, you didn't create a training plan yet!\n")
+            else:
+                print_training_plan()
         elif user_input == 3:
             print_calculated_values()
         input('Press Enter to return to main menu:\n')
