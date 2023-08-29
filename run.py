@@ -43,7 +43,43 @@ def check_input(user_input, requirements_list):
         elif type(req) == tuple and (user_input < req[0] or user_input > req[1]):
             error_message = f'\nPlease enter a value between {req[0]} and {req[1]}\n'
             break
+        
+        elif req == 'cadence': # input format required '2 4 5' or e.g. '2,4, 5'
+            user_input, error_message = get_cadence_values(user_input)
+            if error_message:
+                break
 
+    return user_input, error_message
+
+
+def get_cadence_values(user_input):
+    """
+    This function expects three numbers separated by commas or spaces or both 
+    as they should be entered by the user. If those criteria are not fulfilled,
+    an appropriate error message is presented.
+    """
+    error_message = ''
+    space_free_list = user_input.split()
+
+    nums = []
+    for element in space_free_list:
+        comma_free_list = element.split(',')
+        print(comma_free_list)
+        for el in comma_free_list:
+            if el: # ignore empty strings '' separated after the commas
+                try:
+                    el = int(el)
+                except:
+                    try:
+                        el = float(el)
+                    except:
+                        error_message = 'Please enter numbers only\n'
+                        return user_input, error_message
+                nums.append(el)
+    if len(nums) != 3:
+        error_message = 'Please enter three numbers\n'
+    
+    print(nums)
     return user_input, error_message
 
 
