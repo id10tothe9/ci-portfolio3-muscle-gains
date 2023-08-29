@@ -22,11 +22,13 @@ def check_input(user_input, requirements_list):
     """
     error_message = ''
     for req in requirements_list:
-        if req == 'integer':
+        if req == 'positive integer':
             try:
                 user_input = int(user_input)
+                if user_input <= 0:
+                    raise ValueError
             except ValueError:
-                error_message = '\nPlease enter an integer.\n'
+                error_message = '\nPlease enter a positive natural number.\n'
                 break
 
         elif req == 'positive float':
@@ -35,7 +37,7 @@ def check_input(user_input, requirements_list):
                 if user_input < 0:
                     raise ValueError
             except ValueError:
-                error_message = '\nPlease enter a positive floating number\n'
+                error_message = '\nPlease enter a positive real number\n'
                 break
 
         elif type(req) == tuple and (user_input < req[0] or user_input > req[1]):
@@ -96,7 +98,7 @@ def get_group(muscle_groups):
             i += 1
             group_names.append(group.name)
             message += f'{i}. {group.name}\n'
-        user_input = get_user_input(message, ['integer', (1, i)])
+        user_input = get_user_input(message, ['positive integer', (1, i)])
         if user_input == 1:
             group = MuscleGroup()
             group.get_name()
@@ -113,6 +115,8 @@ def get_exercise():
     exercise.get_name()
     exercise.get_sets()
     exercise.get_reps_and_weights()
+    exercise.get_cadence()
+    exercise.get_rest()
     return exercise
 
 
@@ -148,6 +152,8 @@ class Exercise():
         self.name = ''
         self.sets = ''
         self.reps_and_weights = []
+        self.cadence = []
+        self.rest = ''
 
     def get_name(self):
         message = 'Enter name of the exercise\n'
@@ -155,18 +161,27 @@ class Exercise():
   
     def get_sets(self):
         message = 'How many sets?\n'
-        self.sets = get_user_input(message, ['integer'])
+        self.sets = get_user_input(message, ['positive integer'])
 
     def get_reps_and_weights(self):
         for set in range(self.sets):
             message = f'How many reps in set Nr. {set+1}\n'
-            reps = get_user_input(message, ['integer'])
+            reps = get_user_input(message, ['positive integer'])
             message = f'Which weight for set Nr. {set+1}\n'
             weight = get_user_input(message, ['positive float'])
             self.reps_and_weights.append([reps, weight])
   
     def get_cadence(self):
-        message = 'cadence: next, enter the duration of the contraction, pause and extension in that order as comma or space separated numbers. You can skip this value by pressing enter instead:'
+        message = 'Cadence: enter the duration of the contraction, pause and extension in that order as comma (or space) separated numbers\ne.g. 2, 0, 4\nYou can skip this value by pressing enter instead:\n'
+        self.cadence = get_user_input(message, ['cadence'])
+    
+    def get_rest(self):
+        """
+        Get the resting duration after the exercise in seconds.
+        """
+        message = 'How long should the resting duration be after this exercise?\n'
+        self.rest = get_user_input(message, ['positive integer'])
+
 
 
 
@@ -175,7 +190,7 @@ def main_menu():
     while True:
         global training_plan
         message = main_menu_message()
-        user_input = get_user_input(message, ['integer', (1, 3)])
+        user_input = get_user_input(message, ['positive integer', (1, 3)])
         if user_input == 1:
             training_plan = create_training_plan()
         elif user_input == 2:
