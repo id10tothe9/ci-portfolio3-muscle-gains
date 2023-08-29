@@ -54,8 +54,8 @@ def check_input(user_input, requirements_list):
                 elif user_input.find('no') > -1:
                     user_input = 'no'
                 else:
-                    raise error
-            except error:
+                    raise ValueError
+            except ValueError:
                 error_message = "Please enter a 'yes' or 'no' answer."
                 break
 
@@ -124,6 +124,16 @@ def create_training_plan():
     #   they want to delete the current table and construct a new one
     #   If user says yes, delete all current objects and data first.
     global training_plan
+
+
+    if training_plan != {}:
+        message = "You have already created a plan. Do you want to edit it or replace it? Please choose an option:\n1. Add exercises to current training plan.\n2. Delete current plan and create a new one.\n"
+        user_input = get_user_input(message, ['positive integer', (1, 2)])
+        if user_input == 1:
+            pass
+        else:
+            training_plan = {}
+
     # ask user to "enter a new muscle group or choose an existent group"
     # get group name
     # construct basic muscle group object
@@ -143,7 +153,7 @@ def create_training_plan():
     # choice: same group / different group?
     # if different group -> choose an existent group or enter a new one
 
-    return
+    return 
 
 
 def get_group(training_plan):
@@ -243,7 +253,7 @@ class Exercise():
 
 def print_training_plan():
     global training_plan
-    
+
 
 
 
@@ -253,7 +263,8 @@ def main_menu():
         message = main_menu_message()
         user_input = get_user_input(message, ['positive integer', (1, 3)])
         if user_input == 1:
-            training_plan = create_training_plan()
+            create_training_plan()
+            print(training_plan)
         elif user_input == 2:
             if training_plan == {}:
                 print("Sorry, you didn't create a training plan yet!\n")
