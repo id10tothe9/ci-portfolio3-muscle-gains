@@ -1,3 +1,5 @@
+from prettytable import PrettyTable
+
 
 def welcome_message():
     return """\n----------------------------------
