@@ -186,7 +186,7 @@ def get_group(training_plan):
             group = MuscleGroup()
             group.get_name()
         else:
-            group = training_plan[group_names[i-2]]
+            group = training_plan[group_names[user_input-2]]
     else:
         group = MuscleGroup()
         group.get_name()
