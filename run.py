@@ -334,7 +334,7 @@ def print_training_plan():
     for set_number in range(1, most_sets+1): # reserve a place holder for highest number of sets
         sheet_headers.extend([f'Set{set_number}\nReps', f'Set{set_number}\nWeight\n(kg)'])
     if most_sets > 1: # add place holder for further sets in terminal output
-                table_headers.append('Further\nSets\n[...]')
+                table_headers.append('more\nSets\n[..]')
     if cadence:
         sheet_headers.append('Cadence\n(s)')
         table_headers.append('Cadence\n(s)')
@@ -355,7 +355,7 @@ def print_training_plan():
             table_row.extend([group.name, exercise.name, exercise.sets])
             table_row.extend(exercise.reps_and_weights[0]) # add only first set data to terminal table
             if exercise.sets > 1: # add place holder for further sets in terminal table
-                table_row.append('[...]')
+                table_row.append('[..]')
             else:
                 table_row.append('--')
             for reps_and_weights in exercise.reps_and_weights:
