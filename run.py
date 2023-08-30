@@ -14,18 +14,32 @@ GSPREAD_CLIENT = gspread.authorize(SCOPED_CREDS)
 SHEET = GSPREAD_CLIENT.open('Muscle Gains')
 
 
+def get_lines_str(message):
+    message_lines = message.split('\n')
+    str_len = 0
+    for line in message_lines:
+        if len(line) > str_len:
+            str_len = len(line)
+    
+    return f'{str_len*"-"}'
+
+
+def get_message(message):
+    lines_str = get_lines_str(message)
+    return f'\n{lines_str}\n{message}\n{lines_str}\n'
+
 def welcome_message():
-    return """\n----------------------------------
-    Welcome!"""
+    message = 'Welcome'
+    return message
 
 
 def main_menu_message():
+    message = f'Please choose an option:\n\
+    1. Create a new training plan\n\
+    2. Display current training plan\n\
+    3. Display calculated values'
 
-    return """\n----------------------------------
-    Please choose an option:
-    1. Create a new training plan
-    2. Display current training plan
-    3. Display calculated values\n----------------------------------\n\n"""
+    return message
 
 
 def check_input(user_input, requirements_list):
@@ -120,8 +134,9 @@ def get_user_input(message, requirements_list):
     if their answer satisfies all requirements by calling the check_input
     function. Return user_input if user answer is valid.
     """
+    lines_str = get_lines_str(message)
     while True:
-        user_input = input(message)
+        user_input = input(get_message(message))
         user_input, error_message = check_input(user_input, requirements_list)
         if error_message:
             print(error_message)
@@ -142,7 +157,7 @@ def create_training_plan():
 
 
     if training_plan != {}:
-        message = "You have already created a plan. Do you want to edit it or replace it? Please choose an option:\n1. Add exercises to current training plan.\n2. Delete current plan and create a new one.\n"
+        message = "You have already created a plan. Do you want to edit it or replace it? Please choose an option:\n1. Add exercises to current training plan.\n2. Delete current plan and create a new one."
         user_input = get_user_input(message, ['positive integer', (1, 2)])
         if user_input == 1:
             pass
@@ -160,7 +175,7 @@ def create_training_plan():
         """
         Continue looping to add more exercises until user is done.
         """
-        message = "Do you want to add another exercise? Please type 'yes' or 'no'.\n"
+        message = "Do you want to add another exercise? Please type 'yes' or 'no'."
         user_input = get_user_input(message, ['yes or no'])
         if user_input == 'no':
             break
@@ -176,11 +191,11 @@ def get_group(training_plan):
         i = 1
         group_names = []
         message = 'Choose an option to enter a new muscle group or use an exsistent one:\n'
-        message += f'{i}. New muscle group\n'
+        message += f'{i}. New muscle group'
         for group_name in training_plan:
             i += 1
             group_names.append(group_name)
-            message += f'{i}. {group_name}\n'
+            message += f'\n{i}. {group_name}'
         user_input = get_user_input(message, ['positive integer', (1, i)])
         if user_input == 1:
             group = MuscleGroup()
@@ -212,7 +227,7 @@ class MuscleGroup():
         self.exercises = {} # MuscleGroup contains a dictionary of exercises
   
     def get_name(self):
-        message = 'Enter name of the muscle group\n'
+        message = 'Enter name of the muscle group'
         self.name = get_user_input(message, [''])
   
     def add_exercise(self, exercise):
@@ -255,30 +270,30 @@ class Exercise():
         self.rest = ''
 
     def get_name(self):
-        message = 'Enter name of the exercise\n'
+        message = 'Enter name of the exercise'
         self.name = get_user_input(message, [''])
   
     def get_sets(self):
-        message = 'How many sets?\n'
+        message = 'How many sets?'
         self.sets = get_user_input(message, ['positive integer', 'minimum 1'])
 
     def get_reps_and_weights(self):
         for set in range(self.sets):
-            message = f'How many reps in set Nr. {set+1}\n'
+            message = f'How many reps in set Nr. {set+1}'
             reps = get_user_input(message, ['positive integer', 'minimum 1'])
-            message = f'Which weight for set Nr. {set+1}\n'
+            message = f'Which weight for set Nr. {set+1}'
             weight = get_user_input(message, ['positive float'])
             self.reps_and_weights.append([reps, weight])
   
     def get_cadence(self):
-        message = 'Cadence: enter the duration of the contraction, pause and extension in that order as comma (or space) separated numbers\ne.g. 2, 0, 4\nYou can skip this value by pressing enter instead:\n'
+        message = 'Cadence: enter the duration of the contraction, pause and extension in that order as comma (or space) separated numbers\ne.g. 2, 0, 4\nYou can skip this value by pressing enter instead:'
         self.cadence = get_user_input(message, ['cadence'])
     
     def get_rest(self):
         """
         Get the resting duration after the exercise in seconds.
         """
-        message = 'How long should the resting duration be after this exercise?\n'
+        message = 'How long should the resting duration be after this exercise?'
         self.rest = get_user_input(message, ['positive integer'])
 
 
@@ -354,7 +369,7 @@ def print_training_plan():
             table_row = [] # reset table_row for the next exercise
 
     table = tabulate(table_rows, headers = table_headers, tablefmt = "fancy_grid", stralign = ("center"), numalign = ("center"))
-    print(table)
+    print(f'\n{table}\n')
     return
 
 
@@ -375,9 +390,8 @@ def print_calculated_values():
         table_rows.append([group.name, volume, tut])
         SHEET.worksheet(worksheet).append_row(sheet_row) # add row to google sheet
         sheet_row = [] # reset sheet_row for next row in google sheet
-        print(table_rows)
     table = tabulate(table_rows, headers = table_headers, tablefmt = "fancy_grid", stralign = ("center"), numalign = ("center"))
-    print(table)
+    print(f'\n{table}\n')
     return
 
 
