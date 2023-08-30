@@ -400,6 +400,7 @@ def print_calculated_values():
         sheet_row = [] # reset sheet_row for next row in google sheet
     table = tabulate(table_rows, headers = table_headers, tablefmt = "fancy_grid", stralign = ("center"), numalign = ("center"))
     print(f'\n{table}')
+    print(f'\nTotal Duration Of Training: {tot_session_time}(s)')
     return
 
 
