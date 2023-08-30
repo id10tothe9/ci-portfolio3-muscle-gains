@@ -148,11 +148,11 @@ def get_cadence_values(user_input):
                     try:
                         el = float(el)
                     except:
-                        error_message = 'Please enter numbers only\n'
+                        error_message = color_error_message('\nPlease enter numbers only')
                         return user_input, error_message
                 nums.append(el)
     if len(nums) != 3:
-        error_message = 'Please enter three numbers\n'
+        error_message = color_error_message('\nPlease enter three numbers')
     else:
         user_input = nums
     
@@ -231,7 +231,7 @@ def get_group(training_plan):
             group = MuscleGroup()
             group.get_name()
             if training_plan.get(group.name) != None: # if group already exists use it instead
-                print('\nYou have already entered this muscle group!\nWill be adding the exercise to it :)')
+                print(f'\nYou have already entered this muscle group!\nWill be adding the exercise to it :)\nChosen muscle group: {group.name}')
                 group = training_plan[group.name]
         else:
             group = training_plan[group_names[user_input-2]]
@@ -455,12 +455,14 @@ def main_menu():
             print('\nThank you for your participation!')
         elif user_input == 2:
             if training_plan == {}:
-                print("Sorry, you didn't create a training plan yet!\n")
+                message = "\nSorry, you didn't create a training plan yet!"
+                print(color_error_message(message))
             else:
                 print_training_plan()
         elif user_input == 3:
             if training_plan == {}:
-                print("Sorry, you didn't create a training plan yet!\n")
+                message = "\nSorry, you didn't create a training plan yet!"
+                print(color_error_message(message))
             else:
                 print_calculated_values()
         input('\nPress Enter to return to main menu.\n')
