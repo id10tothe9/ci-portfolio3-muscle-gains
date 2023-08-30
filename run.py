@@ -15,7 +15,7 @@ SHEET = GSPREAD_CLIENT.open('Muscle Gains')
 sheet_tinyurl = 'https://tinyurl.com/mr2cfuv8'
 
 
-def get_lines_str(message):
+def get_lines_str(message, symb):
     message_lines = message.split('\n')
     str_len = 0
     for line in message_lines:
@@ -23,12 +23,13 @@ def get_lines_str(message):
             str_len = len(line)
     if str_len > 80: # avoid separator lines longer than terminal char limit
         str_len = 80    
-    return f'{str_len*"-"}'
+    return f'{str_len*symb}'
 
 
 def get_message(message):
-    lines_str = get_lines_str(message)
-    return f'\n{lines_str}\n{message}\n{lines_str}\n'
+    lines_str = get_lines_str(message, '-')
+    plus_str = get_lines_str(message, '+')
+    return f'\n{plus_str}\n{message}\n{lines_str}\n'
 
 def welcome_message():
     message = 'Welcome'
@@ -88,7 +89,7 @@ def check_input(user_input, requirements_list):
             try:
                 user_input = user_input.lower()
                 if len(user_input) > 3: # random strings that might contain yes or no are not valid
-                    raise error                
+                    raise ValueError                
                 elif user_input.find('yes') > -1:
                     user_input = 'yes'
                 elif user_input.find('no') > -1:
@@ -96,7 +97,7 @@ def check_input(user_input, requirements_list):
                 else:
                     raise ValueError
             except ValueError:
-                error_message = "Please enter a 'yes' or 'no' answer."
+                error_message = "\nPlease enter a 'yes' or 'no' answer."
                 break
 
         
@@ -145,7 +146,6 @@ def get_user_input(message, requirements_list):
     if their answer satisfies all requirements by calling the check_input
     function. Return user_input if user answer is valid.
     """
-    lines_str = get_lines_str(message)
     while True:
         user_input = input(get_message(message))
         user_input, error_message = check_input(user_input, requirements_list)
