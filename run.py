@@ -20,7 +20,8 @@ def get_lines_str(message):
     for line in message_lines:
         if len(line) > str_len:
             str_len = len(line)
-    
+    if str_len > 80: # avoid separator lines longer than terminal char limit
+        str_len = 80    
     return f'{str_len*"-"}'
 
 
@@ -286,7 +287,7 @@ class Exercise():
             self.reps_and_weights.append([reps, weight])
   
     def get_cadence(self):
-        message = 'Cadence: enter the duration of the contraction, pause and extension in that order as comma (or space) separated numbers\ne.g. 2, 0, 4\nYou can skip this value by pressing enter instead:'
+        message = 'Cadence: enter the duration of the contraction, pause and extension\nin that order as comma (or space) separated numbers:\ne.g. 2, 0, 4\n\nYou can skip this value by pressing enter instead.'
         self.cadence = get_user_input(message, ['cadence'])
     
     def get_rest(self):
