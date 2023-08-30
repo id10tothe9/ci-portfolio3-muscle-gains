@@ -335,8 +335,9 @@ def print_training_plan():
                 sheet_row.extend(['--', '--'])
             if cadence:
                 if exercise.cadence:
-                    sheet_row.append(exercise.cadence)
-                    table_row.append(exercise.cadence)
+                    cadence_str = f'{exercise.cadence[0]}, {exercise.cadence[1]}, {exercise.cadence[2]}'
+                    sheet_row.append(cadence_str)
+                    table_row.append(cadence_str)
                 else:
                     sheet_row.append('--')
                     table_row.append('--')
