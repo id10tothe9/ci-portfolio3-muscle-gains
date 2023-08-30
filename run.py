@@ -1,4 +1,4 @@
-from prettytable import PrettyTable
+from tabulate import tabulate
 
 
 def welcome_message():
@@ -276,21 +276,39 @@ def print_training_plan():
     """
     Next we create the title row for the table. We reserve the required number of Reps x Weights columns depending on the highest number of sets in all exercises. We add the 'cadence' and 'rest' columns if they exist in any exercise.
     """
-    field_names = ["Muscle Group", "Exercise", "Sets"]
+    table_headers = ["Muscle\nGroup", "Exercise", "Sets"]
     for set_number in range(1, most_sets+1): # reserve a place holder for highest number of sets
-        field_names.extend([f'{set_number}. Reps', f'{set_number}. Weights (kg)'])
+        table_headers.extend([f'Set{set_number}\nReps', f'Set{set_number}\nWeight'])
     if cadence:
-        field_names.append('Cadence (s)')
+        table_headers.append('Cadence\n(s)')
     if rest:
-        field_names.append('Rest Duration (s)')
+        table_headers.append('Rest\n(s)')
+
+
+    # field_names1 = ["Muscle\nGroup", "Exercise\ns", "Sets\ns"]
+    # field_names2 = ["Group", '' , '']
+    # for set_number in range(1, most_sets+1): # reserve a place holder for highest number of sets
+    #     field_names1.extend([f'Set{set_number}\ns', f'Sets{set_number}\ns'])
+    #     field_names2.extend(["Reps", "Weight"])
+    # if cadence:
+    #     field_names1.append('Cadence\ns')
+    #     field_names2.append('(s)')
+    # if rest:
+    #     field_names1.append('Rest\ns')
+    #     field_names2.append('(s)')
+
     
     # Create the PrettyTable object and add the titles row
-    table = PrettyTable()
-    table.field_names = field_names
+#    table = PrettyTable()
+    # We will add the title row as multiple rows with a divider at the end in order to adhere to the 80 characters limit of the terminal deployed on Heroku.
+#    table.field_names = field_names1
+    #table.add_row(field_names1)
+    #table.add_row(field_names2, divider=True)
     """
     Now we can populate the rows of the table. Where a value is missing we set the cell to '--'.
     """
     table_row = []
+    table_rows = []
     for group in training_plan.values(): # training_plan is a dictionary containing the muscle_group objects
         for exercise in group.exercises.values(): # group.exercises is a dict containing the exercise objects
             table_row.extend([group.name, exercise.name, exercise.sets])
@@ -309,9 +327,11 @@ def print_training_plan():
                     table_row.append(exercise.rest)
                 else:
                     table_row.append('--')
-            table.add_row(table_row)
+            #table.add_row(table_row)
+            table_rows.append(table_row)
             table_row = [] # reset table_row for the next exercise
             
+    table = tabulate(table_rows, headers = table_headers, tablefmt = "fancy_grid", stralign = ("center"), numalign = ("center"))
     print(table)
     return
     
