@@ -168,7 +168,7 @@ def create_training_plan():
 
 
     if training_plan != {}:
-        message = "You have already created a plan. Do you want to edit it or replace it? Please choose an option:\n1. Add exercises to current training plan.\n2. Delete current plan and create a new one."
+        message = "You have already created a plan. Do you want to edit it or replace it?\nPlease choose an option:\n1. Add exercises to current training plan.\n2. Delete current plan and create a new one."
         user_input = get_user_input(message, ['positive integer', (1, 2)])
         if user_input == 1:
             pass
@@ -211,6 +211,9 @@ def get_group(training_plan):
         if user_input == 1:
             group = MuscleGroup()
             group.get_name()
+            if training_plan.get(group.name) != None: # if group already exists use it instead
+                print('\nYou have already entered this muscle group!\nWill be adding the exercise to it :)')
+                group = training_plan[group.name]
         else:
             group = training_plan[group_names[user_input-2]]
     else:
