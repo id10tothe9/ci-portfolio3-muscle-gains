@@ -278,7 +278,7 @@ def print_training_plan():
     """
     table_headers = ["Muscle\nGroup", "Exercise", "Sets"]
     for set_number in range(1, most_sets+1): # reserve a place holder for highest number of sets
-        table_headers.extend([f'Set{set_number}\nReps', f'Set{set_number}\nWeight'])
+        table_headers.extend([f'Set{set_number}\nReps', f'Set{set_number}\nWeight\n(kg)'])
     if cadence:
         table_headers.append('Cadence\n(s)')
     if rest:
@@ -307,30 +307,41 @@ def print_training_plan():
     """
     Now we can populate the rows of the table. Where a value is missing we set the cell to '--'.
     """
+    sheet_row = []
     table_row = []
+    sheet_rows = []
     table_rows = []
     for group in training_plan.values(): # training_plan is a dictionary containing the muscle_group objects
         for exercise in group.exercises.values(): # group.exercises is a dict containing the exercise objects
+            sheet_row.extend([group.name, exercise.name, exercise.sets])
             table_row.extend([group.name, exercise.name, exercise.sets])
-            
+            table_row.extend(reps_and_weights[0]) # add only first set data to terminal table
             for reps_and_weights in exercise.reps_and_weights:
-                table_row.extend(reps_and_weights)
+                sheet_row.extend(reps_and_weights)
             for set_number in range(exercise.sets, most_sets): # In case of empty values, fill cells with '--'
-                table_row.extend(['--', '--'])
+                sheet_row.extend(['--', '--'])
             if cadence:
                 if exercise.cadence:
+                    sheet_row.append(exercise.cadence)
                     table_row.append(exercise.cadence)
                 else:
+                    sheet_row.append('--')
                     table_row.append('--')
             if rest:
                 if exercise.rest:
+                    sheet_row.append(exercise.rest)
                     table_row.append(exercise.rest)
                 else:
+                    sheet_row.append('--')
                     table_row.append('--')
             #table.add_row(table_row)
+            sheet_rows.append(table_row)
             table_rows.append(table_row)
+            sheet_row = [] # reset sheet_row for the next exercise
             table_row = [] # reset table_row for the next exercise
-            
+
+
+    
     table = tabulate(table_rows, headers = table_headers, tablefmt = "fancy_grid", stralign = ("center"), numalign = ("center"))
     print(table)
     return
