@@ -12,6 +12,7 @@ CREDS = Credentials.from_service_account_file('creds.json')
 SCOPED_CREDS = CREDS.with_scopes(SCOPE)
 GSPREAD_CLIENT = gspread.authorize(SCOPED_CREDS)
 SHEET = GSPREAD_CLIENT.open('Muscle Gains')
+sheet_tinyurl = 'https://tinyurl.com/mr2cfuv8'
 
 
 def get_lines_str(message):
@@ -330,7 +331,7 @@ def print_training_plan():
     """
     SHEET.worksheet('Training Table').clear() # clear worksheet
     sheet_headers = ["Muscle\nGroup", "Exercise", "Sets"]
-    table_headers = ["Muscle\nGroup", "Exercise", "Sets", "Set1\nReps", "Set1\nWeight\n(kg)"]
+    table_headers = ["Muscle\nGroup", "Exercise", "Sets", "Reps", "Weight\n(kg)"]
     for set_number in range(1, most_sets+1): # reserve a place holder for highest number of sets
         sheet_headers.extend([f'Set{set_number}\nReps', f'Set{set_number}\nWeight\n(kg)'])
     # if most_sets > 1: # add place holder for further sets in terminal output
@@ -384,6 +385,10 @@ def print_training_plan():
 
     table = tabulate(table_rows, headers = table_headers, tablefmt = "fancy_grid", stralign = ("center"), numalign = ("center"))
     print(f'\n{table}')
+    if most_sets > 1:
+        print(f'\nWe printed out Reps and Weight for the first set only due to display limits.\nYou can view the complete table in google sheet:\n{sheet_tinyurl} -> worksheet: Training Table')
+    else:
+        print(f'\nYou can also view this table in google sheet:\n{sheet_tinyurl} -> worksheet: Training Table')
     return
 
 
@@ -407,6 +412,7 @@ def print_calculated_values():
     table = tabulate(table_rows, headers = table_headers, tablefmt = "fancy_grid", stralign = ("center"), numalign = ("center"))
     print(f'\n{table}')
     print(f'\nTotal Duration Of Training: {tot_session_time}(s)')
+    print(f'\nYou can also view this table in google sheet:\n{sheet_tinyurl} -> worksheet: Training Metrics')
     return
 
 
