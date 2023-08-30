@@ -109,6 +109,8 @@ def get_cadence_values(user_input):
                 nums.append(el)
     if len(nums) != 3:
         error_message = 'Please enter three numbers\n'
+    else:
+        user_input = f'{nums[0]}, {nums[1]}, {nums[2]}'
     
     print(nums)
     return user_input, error_message
@@ -228,14 +230,14 @@ class MuscleGroup():
         total_reps = 0 # to get total number of repetitions in an exercise
         rest_time = 0 # time of resting after each exercises
         for exercise in self.exercises.values():
-            for rnw in reps_and_weights:
+            for rnw in exercise.reps_and_weights:
                 volume += rnw[0]*rnw[1]
                 total_reps += rnw[0]
-            if self.cadence !=[]:
-                tut += total_reps * (self.cadence[0] + self.cadence[2])
-                exercise_time = tut + (total_reps * self.cadence[1])
-            if self.rest != '':
-                rest_time += self.rest
+            if exercise.cadence !=[]:
+                tut += total_reps * (exercise.cadence[0] + exercise.cadence[2])
+                exercise_time = tut + (total_reps * exercise.cadence[1])
+            if exercise.rest != '':
+                rest_time += exercise.rest
         group_time = exercise_time + rest_time # total duration of training in this group
 
         return volume, tut, group_time
@@ -358,7 +360,7 @@ def print_training_plan():
 
 
 def print_calculated_values():
-    
+
 
 
 
