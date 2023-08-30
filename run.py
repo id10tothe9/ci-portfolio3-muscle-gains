@@ -231,12 +231,12 @@ class Exercise():
   
     def get_sets(self):
         message = 'How many sets?\n'
-        self.sets = get_user_input(message, ['positive integer'])
+        self.sets = get_user_input(message, ['positive integer', 'minimum 1'])
 
     def get_reps_and_weights(self):
         for set in range(self.sets):
             message = f'How many reps in set Nr. {set+1}\n'
-            reps = get_user_input(message, ['positive integer'])
+            reps = get_user_input(message, ['positive integer', 'minimum 1'])
             message = f'Which weight for set Nr. {set+1}\n'
             weight = get_user_input(message, ['positive float'])
             self.reps_and_weights.append([reps, weight])
@@ -254,8 +254,71 @@ class Exercise():
 
 
 def print_training_plan():
+    """
+    This function fetches all exercise rows of defined muscle groups, orders them into lists
+    and prints them out with the prettytable library function.
+    """
     global training_plan
+    """
+    In this cascading for loop we only count the highest number of sets and register if cadence and rest variables were registered. We use this information to set equal row lengths for all exercises.
+    """
+    most_sets = 0 # Registers the highest number of sets in order to set all rows to equal lengths
+    cadence = False
+    rest = False
+    for group in training_plan.values(): # training_plan is a dictionary containing the muscle_group objects
+        for exercise in group.exercises.values(): # group.exercises is a dict containing the exercise objects
+            if exercise.sets > most_sets:
+                most_sets = exercise.sets
+            if exercise.cadence !=[]:
+                cadence = True
+            if exercise.rest != '':
+                rest = True
+    """
+    Next we create the title row for the table. We reserve the required number of Reps x Weights columns depending on the highest number of sets in all exercises. We add the 'cadence' and 'rest' columns if they exist in any exercise.
+    """
+    field_names = ["Muscle Group", "Exercise", "Sets"]
+    for set_number in range(1, most_sets+1): # reserve a place holder for highest number of sets
+        field_names.extend([f'{set_number}. Reps', f'{set_number}. Weights (kg)'])
+    if cadence:
+        field_names.append('Cadence (s)')
+    if rest:
+        field_names.append('Rest Duration (s)')
+    
+    # Create the PrettyTable object and add the titles row
+    table = PrettyTable()
+    table.field_names = field_names
+    """
+    Now we can populate the rows of the table. Where a value is missing we set the cell to '--'.
+    """
+    table_row = []
+    for group in training_plan.values(): # training_plan is a dictionary containing the muscle_group objects
+        for exercise in group.exercises.values(): # group.exercises is a dict containing the exercise objects
+            table_row.extend([group.name, exercise.name, exercise.sets])
+            
+            for reps_and_weights in exercise.reps_and_weights:
+                table_row.extend(reps_and_weights)
+            for set_number in range(exercise.sets, most_sets): # In case of empty values, fill cells with '--'
+                table_row.extend(['--', '--'])
+            if cadence:
+                if exercise.cadence:
+                    table_row.append(exercise.cadence)
+                else:
+                    table_row.append('--')
+            if rest:
+                if exercise.rest:
+                    table_row.append(exercise.rest)
+                else:
+                    table_row.append('--')
+            table.add_row(table_row)
+            table_row = [] # reset table_row for the next exercise
+            
+    print(table)
+    return
+    
 
+    
+    # add reps x weights according to longest set in exercises, populate empty ones with '--'
+    # if cadence and rest values were entered, create and populate these columns too
 
 
 
