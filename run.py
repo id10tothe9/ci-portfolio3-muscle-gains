@@ -1,4 +1,17 @@
 from tabulate import tabulate
+import gspread
+from google.oauth2.service_account import Credentials
+
+SCOPE = [
+    "https://www.googleapis.com/auth/spreadsheets",
+    "https://www.googleapis.com/auth/drive.file",
+    "https://www.googleapis.com/auth/drive"
+    ]
+
+CREDS = Credentials.from_service_account_file('creds.json')
+SCOPED_CREDS = CREDS.with_scopes(SCOPE)
+GSPREAD_CLIENT = gspread.authorize(SCOPED_CREDS)
+SHEET = GSPREAD_CLIENT.open('Muscle Gains')
 
 
 def welcome_message():
@@ -276,13 +289,18 @@ def print_training_plan():
     """
     Next we create the title row for the table. We reserve the required number of Reps x Weights columns depending on the highest number of sets in all exercises. We add the 'cadence' and 'rest' columns if they exist in any exercise.
     """
-    table_headers = ["Muscle\nGroup", "Exercise", "Sets"]
+    SHEET.worksheet('Sheet1').clear() # clear worksheet
+    sheet_headers = ["Muscle\nGroup", "Exercise", "Sets"]
+    table_headers = ["Muscle\nGroup", "Exercise", "Sets", "Set1\nReps", "Set1\nWeight\n(kg)"]
     for set_number in range(1, most_sets+1): # reserve a place holder for highest number of sets
-        table_headers.extend([f'Set{set_number}\nReps', f'Set{set_number}\nWeight\n(kg)'])
+        sheet_headers.extend([f'Set{set_number}\nReps', f'Set{set_number}\nWeight\n(kg)'])
     if cadence:
+        sheet_headers.append('Cadence\n(s)')
         table_headers.append('Cadence\n(s)')
     if rest:
+        sheet_headers.append('Rest\n(s)')
         table_headers.append('Rest\n(s)')
+    SHEET.worksheet('Sheet1').append_row(sheet_headers) # add row to google sheet
 
 
     # field_names1 = ["Muscle\nGroup", "Exercise\ns", "Sets\ns"]
@@ -315,7 +333,7 @@ def print_training_plan():
         for exercise in group.exercises.values(): # group.exercises is a dict containing the exercise objects
             sheet_row.extend([group.name, exercise.name, exercise.sets])
             table_row.extend([group.name, exercise.name, exercise.sets])
-            table_row.extend(reps_and_weights[0]) # add only first set data to terminal table
+            table_row.extend(exercise.reps_and_weights[0]) # add only first set data to terminal table
             for reps_and_weights in exercise.reps_and_weights:
                 sheet_row.extend(reps_and_weights)
             for set_number in range(exercise.sets, most_sets): # In case of empty values, fill cells with '--'
@@ -334,14 +352,12 @@ def print_training_plan():
                 else:
                     sheet_row.append('--')
                     table_row.append('--')
-            #table.add_row(table_row)
-            sheet_rows.append(table_row)
+            sheet_rows.append(sheet_row)
+            SHEET.worksheet('Sheet1').append_row(sheet_row) # add row to google sheet
             table_rows.append(table_row)
             sheet_row = [] # reset sheet_row for the next exercise
             table_row = [] # reset table_row for the next exercise
 
-
-    
     table = tabulate(table_rows, headers = table_headers, tablefmt = "fancy_grid", stralign = ("center"), numalign = ("center"))
     print(table)
     return
