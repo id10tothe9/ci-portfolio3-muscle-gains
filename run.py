@@ -52,7 +52,10 @@ def check_input(user_input, requirements_list):
     """
     error_message = ''
     for req in requirements_list:
-        if req == 'positive integer':
+        if req == 'can skip': # in case user decides to skip entering values
+            if user_input == '':
+                break
+        elif req == 'positive integer':
             try:
                 user_input = int(user_input)
                 if user_input <= 0:
@@ -288,14 +291,18 @@ class Exercise():
   
     def get_cadence(self):
         message = 'Cadence: enter the duration of the contraction, pause and extension\nin that order as comma (or space) separated numbers:\ne.g. 2, 0, 4\n\nYou can skip this value by pressing enter instead.'
-        self.cadence = get_user_input(message, ['cadence'])
+        cadence = get_user_input(message, ['can skip', 'cadence'])
+        if cadence != '':
+            self.cadence = cadence
     
     def get_rest(self):
         """
         Get the resting duration after the exercise in seconds.
         """
         message = 'How long should the resting duration be after this exercise?'
-        self.rest = get_user_input(message, ['positive integer'])
+        rest = get_user_input(message, ['can skip', 'positive integer'])
+        if rest != '':
+            self.rest = rest
 
 
 def print_training_plan():
