@@ -56,6 +56,12 @@ def check_input(user_input, requirements_list):
         if req == 'can skip': # in case user decides to skip entering values
             if user_input == '':
                 break
+        elif req == 'name':
+            try:
+                if len(user_input) < 4:
+                    raise ValueError
+            except ValueError:
+                error_message = '\nName must be at least 4 characters long!'
         elif req == 'positive integer':
             try:
                 user_input = int(user_input)
@@ -233,7 +239,7 @@ class MuscleGroup():
   
     def get_name(self):
         message = 'Enter name of the muscle group'
-        self.name = get_user_input(message, [''])
+        self.name = get_user_input(message, ['name'])
   
     def add_exercise(self, exercise):
         self.exercises[exercise.name] = exercise
@@ -276,7 +282,7 @@ class Exercise():
 
     def get_name(self):
         message = 'Enter name of the exercise'
-        self.name = get_user_input(message, [''])
+        self.name = get_user_input(message, ['name'])
   
     def get_sets(self):
         message = 'How many sets?'
@@ -386,7 +392,7 @@ def print_training_plan():
     table = tabulate(table_rows, headers = table_headers, tablefmt = "fancy_grid", stralign = ("center"), numalign = ("center"))
     print(f'\n{table}')
     if most_sets > 1:
-        print(f'\nWe printed out Reps and Weight for the first set only due to display limits.\nYou can view the complete table in google sheet:\n{sheet_tinyurl} -> worksheet: Training Table')
+        print(f'\nThis table contains Reps and Weight for the first set only due to display limits.\nYou can view the complete table in google sheet:\n{sheet_tinyurl} -> worksheet: Training Table')
     else:
         print(f'\nYou can also view this table in google sheet:\n{sheet_tinyurl} -> worksheet: Training Table')
     return
