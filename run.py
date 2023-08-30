@@ -95,7 +95,6 @@ def get_cadence_values(user_input):
     nums = []
     for element in space_free_list:
         comma_free_list = element.split(',')
-        print(comma_free_list)
         for el in comma_free_list:
             if el: # ignore empty strings '' separated after the commas
                 try:
@@ -110,9 +109,8 @@ def get_cadence_values(user_input):
     if len(nums) != 3:
         error_message = 'Please enter three numbers\n'
     else:
-        user_input = f'{nums[0]}, {nums[1]}, {nums[2]}'
+        user_input = nums
     
-    print(nums)
     return user_input, error_message
 
 
