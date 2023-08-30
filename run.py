@@ -359,7 +359,26 @@ def print_training_plan():
 
 
 def print_calculated_values():
+    worksheet = 'Training Metrics'
+    SHEET.worksheet(worksheet).clear() # clear worksheet
+    sheet_headers = ["Muscle\nGroup", "Volume\n(kg)", "Time Under\nTension (s)"]
+    table_headers = ["Muscle\nGroup", "Volume\n(kg)", "Time Under\nTension (s)"]
+    SHEET.worksheet(worksheet).append_row(sheet_headers) # add headers row to google sheet
 
+    sheet_row = []
+    table_rows = []
+    tot_session_time = 0 # total duration of training session
+    for group in training_plan.values():
+        volume, tut, group_time = group.calc_metrics()
+        tot_session_time += group_time
+        sheet_row.extend([group.name, volume, tut])
+        table_rows.append([group.name, volume, tut])
+        SHEET.worksheet(worksheet).append_row(sheet_row) # add row to google sheet
+        sheet_row = [] # reset sheet_row for next row in google sheet
+        print(table_rows)
+    table = tabulate(table_rows, headers = table_headers, tablefmt = "fancy_grid", stralign = ("center"), numalign = ("center"))
+    print(table)
+    return
 
 
 
