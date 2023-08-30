@@ -34,13 +34,22 @@ def get_message(message):
     return f'\n{plus_str}\n{message}\n{lines_str}\n'
 
 def welcome_message():
-    message = 'Welcome'
-    return message
+    message = "Welcome To Muscle Gains!\n\n\
+    This application is meant for a training instructor.\n\
+    It will help you design training plans for your customers.\n\n\
+    The app will guide you to enter the required data for each exercise:\n\
+    e.g. exercise name, number of sets, repetitions and weights\n\
+    After that you can let it show you the plan you have created thus far,\n\
+    or let it calculate the metrics you need for each muscle group to help you\n\
+    in the design process.\n\n\
+    The data will be saved to a google sheet for your later review, and you can\n\
+    continue editing your current plan by choosing option 1."
+    return get_message(message)
 
 
 def main_menu_message():
-    message = f'Please choose an option:\n\
-    1. Create a new training plan\n\
+    message = 'Please choose an option:\n\
+    1. Create a training plan\n\
     2. Display current training plan\n\
     3. Display calculated values'
 
@@ -251,7 +260,7 @@ class MuscleGroup():
         self.exercises = {} # MuscleGroup contains a dictionary of exercises
   
     def get_name(self):
-        message = 'Enter name of the muscle group'
+        message = 'Enter name of the muscle group\n(e.g. Biceps, Chest, Abs)'
         self.name = get_user_input(message, ['name'])
   
     def add_exercise(self, exercise):
@@ -294,7 +303,7 @@ class Exercise():
         self.rest = ''
 
     def get_name(self):
-        message = 'Enter name of the exercise'
+        message = 'Enter name of the exercise\n(e.g. Curls, Front Squats, French press)'
         self.name = get_user_input(message, ['name'])
   
     def get_sets(self):
