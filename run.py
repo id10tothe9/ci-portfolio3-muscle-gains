@@ -218,14 +218,27 @@ class MuscleGroup():
     def add_exercise(self, exercise):
         self.exercises[exercise.name] = exercise
   
-    def calc_vol(self):
+    def calc_metrics(self):
         """
         A method to calculate volume of the muscle group
         """
+        volume = 0
+        tut = 0 # stands for 'time under tension': time during which the muscles are under tension
+        exercise_time = 0 # total time of exercise
+        total_reps = 0 # to get total number of repetitions in an exercise
+        rest_time = 0 # time of resting after each exercises
         for exercise in self.exercises.values():
-            
+            for rnw in reps_and_weights:
+                volume += rnw[0]*rnw[1]
+                total_reps += rnw[0]
+            if self.cadence !=[]:
+                tut += total_reps * (self.cadence[0] + self.cadence[2])
+                exercise_time = tut + (total_reps * self.cadence[1])
+            if self.rest != '':
+                rest_time += self.rest
+        group_time = exercise_time + rest_time # total duration of training in this group
 
-        return vol
+        return volume, tut, group_time
 
 
 class Exercise():
@@ -305,32 +318,11 @@ def print_training_plan():
         table_headers.append('Rest\n(s)')
     SHEET.worksheet('Training Table').append_row(sheet_headers) # add row to google sheet
 
-
-    # field_names1 = ["Muscle\nGroup", "Exercise\ns", "Sets\ns"]
-    # field_names2 = ["Group", '' , '']
-    # for set_number in range(1, most_sets+1): # reserve a place holder for highest number of sets
-    #     field_names1.extend([f'Set{set_number}\ns', f'Sets{set_number}\ns'])
-    #     field_names2.extend(["Reps", "Weight"])
-    # if cadence:
-    #     field_names1.append('Cadence\ns')
-    #     field_names2.append('(s)')
-    # if rest:
-    #     field_names1.append('Rest\ns')
-    #     field_names2.append('(s)')
-
-    
-    # Create the PrettyTable object and add the titles row
-#    table = PrettyTable()
-    # We will add the title row as multiple rows with a divider at the end in order to adhere to the 80 characters limit of the terminal deployed on Heroku.
-#    table.field_names = field_names1
-    #table.add_row(field_names1)
-    #table.add_row(field_names2, divider=True)
     """
     Now we can populate the rows of the table. Where a value is missing we set the cell to '--'.
     """
     sheet_row = []
     table_row = []
-    sheet_rows = []
     table_rows = []
     for group in training_plan.values(): # training_plan is a dictionary containing the muscle_group objects
         for exercise in group.exercises.values(): # group.exercises is a dict containing the exercise objects
@@ -355,7 +347,6 @@ def print_training_plan():
                 else:
                     sheet_row.append('--')
                     table_row.append('--')
-            sheet_rows.append(sheet_row)
             SHEET.worksheet('Training Table').append_row(sheet_row) # add row to google sheet
             table_rows.append(table_row)
             sheet_row = [] # reset sheet_row for the next exercise
@@ -364,11 +355,10 @@ def print_training_plan():
     table = tabulate(table_rows, headers = table_headers, tablefmt = "fancy_grid", stralign = ("center"), numalign = ("center"))
     print(table)
     return
-    
 
+
+def print_calculated_values():
     
-    # add reps x weights according to longest set in exercises, populate empty ones with '--'
-    # if cadence and rest values were entered, create and populate these columns too
 
 
 
@@ -386,7 +376,10 @@ def main_menu():
             else:
                 print_training_plan()
         elif user_input == 3:
-            print_calculated_values()
+            if training_plan == {}:
+                print("Sorry, you didn't create a training plan yet!\n")
+            else:
+                print_calculated_values()
         input('Press Enter to return to main menu:\n')
 
 
