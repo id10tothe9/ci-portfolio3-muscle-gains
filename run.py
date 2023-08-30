@@ -218,11 +218,14 @@ class MuscleGroup():
     def add_exercise(self, exercise):
         self.exercises[exercise.name] = exercise
   
-    def calc_vol():
+    def calc_vol(self):
         """
         A method to calculate volume of the muscle group
         """
-        return
+        for exercise in self.exercises.values():
+            
+
+        return vol
 
 
 class Exercise():
@@ -289,7 +292,7 @@ def print_training_plan():
     """
     Next we create the title row for the table. We reserve the required number of Reps x Weights columns depending on the highest number of sets in all exercises. We add the 'cadence' and 'rest' columns if they exist in any exercise.
     """
-    SHEET.worksheet('Sheet1').clear() # clear worksheet
+    SHEET.worksheet('Training Table').clear() # clear worksheet
     sheet_headers = ["Muscle\nGroup", "Exercise", "Sets"]
     table_headers = ["Muscle\nGroup", "Exercise", "Sets", "Set1\nReps", "Set1\nWeight\n(kg)"]
     for set_number in range(1, most_sets+1): # reserve a place holder for highest number of sets
@@ -300,7 +303,7 @@ def print_training_plan():
     if rest:
         sheet_headers.append('Rest\n(s)')
         table_headers.append('Rest\n(s)')
-    SHEET.worksheet('Sheet1').append_row(sheet_headers) # add row to google sheet
+    SHEET.worksheet('Training Table').append_row(sheet_headers) # add row to google sheet
 
 
     # field_names1 = ["Muscle\nGroup", "Exercise\ns", "Sets\ns"]
@@ -353,7 +356,7 @@ def print_training_plan():
                     sheet_row.append('--')
                     table_row.append('--')
             sheet_rows.append(sheet_row)
-            SHEET.worksheet('Sheet1').append_row(sheet_row) # add row to google sheet
+            SHEET.worksheet('Training Table').append_row(sheet_row) # add row to google sheet
             table_rows.append(table_row)
             sheet_row = [] # reset sheet_row for the next exercise
             table_row = [] # reset table_row for the next exercise
