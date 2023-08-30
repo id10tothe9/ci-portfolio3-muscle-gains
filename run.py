@@ -179,7 +179,7 @@ def create_training_plan():
         """
         Continue looping to add more exercises until user is done.
         """
-        message = "Do you want to add another exercise? Please type 'yes' or 'no'."
+        message = "Do you want to add another exercise? Please type 'yes' or 'no'"
         user_input = get_user_input(message, ['yes or no'])
         if user_input == 'no':
             break
@@ -299,7 +299,7 @@ class Exercise():
         """
         Get the resting duration after the exercise in seconds.
         """
-        message = 'How long should the resting duration be after this exercise?'
+        message = 'How long should the resting duration be after this exercise?\n\nYou can skip this value by pressing enter instead.'
         rest = get_user_input(message, ['can skip', 'positive integer'])
         if rest != '':
             self.rest = rest
@@ -377,7 +377,7 @@ def print_training_plan():
             table_row = [] # reset table_row for the next exercise
 
     table = tabulate(table_rows, headers = table_headers, tablefmt = "fancy_grid", stralign = ("center"), numalign = ("center"))
-    print(f'\n{table}\n')
+    print(f'\n{table}')
     return
 
 
@@ -399,7 +399,7 @@ def print_calculated_values():
         SHEET.worksheet(worksheet).append_row(sheet_row) # add row to google sheet
         sheet_row = [] # reset sheet_row for next row in google sheet
     table = tabulate(table_rows, headers = table_headers, tablefmt = "fancy_grid", stralign = ("center"), numalign = ("center"))
-    print(f'\n{table}\n')
+    print(f'\n{table}')
     return
 
 
@@ -411,7 +411,7 @@ def main_menu():
         user_input = get_user_input(message, ['positive integer', (1, 3)])
         if user_input == 1:
             create_training_plan()
-            print(training_plan)
+            print('\nThank you for your participation!')
         elif user_input == 2:
             if training_plan == {}:
                 print("Sorry, you didn't create a training plan yet!\n")
@@ -422,7 +422,7 @@ def main_menu():
                 print("Sorry, you didn't create a training plan yet!\n")
             else:
                 print_calculated_values()
-        input('Press Enter to return to main menu:\n')
+        input('\nPress Enter to return to main menu.\n')
 
 
 def main():
