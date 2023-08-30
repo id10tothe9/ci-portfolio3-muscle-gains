@@ -1,4 +1,6 @@
 from tabulate import tabulate
+from colorama import just_fix_windows_console
+from termcolor import colored
 import gspread
 from google.oauth2.service_account import Credentials
 
@@ -45,6 +47,9 @@ def main_menu_message():
     return message
 
 
+def color_error_message(message):
+    return colored(message, 'white', 'on_red')
+
 def check_input(user_input, requirements_list):
     """
     This function takes in the user_input and a list of requirements
@@ -63,13 +68,15 @@ def check_input(user_input, requirements_list):
                     raise ValueError
             except ValueError:
                 error_message = '\nName must be at least 4 characters long!'
+                error_message = color_error_message(error_message)
         elif req == 'positive integer':
             try:
                 user_input = int(user_input)
                 if user_input <= 0:
                     raise ValueError
             except ValueError:
-                error_message = '\nPlease enter a positive natural number.\n'
+                error_message = '\nPlease enter a positive natural number.'
+                error_message = color_error_message(error_message)
                 break
 
         elif req == 'positive float':
@@ -78,11 +85,13 @@ def check_input(user_input, requirements_list):
                 if user_input < 0:
                     raise ValueError
             except ValueError:
-                error_message = '\nPlease enter a positive real number\n'
+                error_message = '\nPlease enter a positive real number'
+                error_message = color_error_message(error_message)
                 break
 
         elif type(req) == tuple and (user_input < req[0] or user_input > req[1]):
-            error_message = f'\nPlease enter a value between {req[0]} and {req[1]}\n'
+            error_message = f'\nPlease enter a value between {req[0]} and {req[1]}.'
+            error_message = color_error_message(error_message)
             break
 
         elif req == 'yes or no':
@@ -98,6 +107,7 @@ def check_input(user_input, requirements_list):
                     raise ValueError
             except ValueError:
                 error_message = "\nPlease enter a 'yes' or 'no' answer."
+                error_message = color_error_message(error_message)
                 break
 
         
@@ -293,9 +303,9 @@ class Exercise():
 
     def get_reps_and_weights(self):
         for set in range(self.sets):
-            message = f'How many reps in set Nr. {set+1}'
+            message = f'How many repetitions (Reps) in set Nr. {set+1}'
             reps = get_user_input(message, ['positive integer', 'minimum 1'])
-            message = f'Which weight for set Nr. {set+1}'
+            message = f'Enter weight in kg for set Nr. {set+1}'
             weight = get_user_input(message, ['positive float'])
             self.reps_and_weights.append([reps, weight])
   
@@ -395,9 +405,9 @@ def print_training_plan():
     table = tabulate(table_rows, headers = table_headers, tablefmt = "fancy_grid", stralign = ("center"), numalign = ("center"))
     print(f'\n{table}')
     if most_sets > 1:
-        print(f'\nThis table contains Reps and Weight for the first set only due to display limits.\nYou can view the complete table in google sheet:\n{sheet_tinyurl} -> worksheet: Training Table')
+        print(f'\nThis table shows Reps and Weight for the first set only due to display limits.\nYou can view the complete table in google sheet:\n{sheet_tinyurl} -> worksheet: "Training Table"')
     else:
-        print(f'\nYou can also view this table in google sheet:\n{sheet_tinyurl} -> worksheet: Training Table')
+        print(f'\nYou can also view this table in google sheet:\n{sheet_tinyurl} -> worksheet: "Training Table"')
     return
 
 
@@ -421,7 +431,7 @@ def print_calculated_values():
     table = tabulate(table_rows, headers = table_headers, tablefmt = "fancy_grid", stralign = ("center"), numalign = ("center"))
     print(f'\n{table}')
     print(f'\nTotal Duration Of Training: {tot_session_time}(s)')
-    print(f'\nYou can also view this table in google sheet:\n{sheet_tinyurl} -> worksheet: Training Metrics')
+    print(f'\nYou can also view this table in google sheet:\n{sheet_tinyurl} -> worksheet: "Training Metrics"')
     return
 
 
