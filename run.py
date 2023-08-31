@@ -470,7 +470,9 @@ def print_training_plan():
                 sheet_row.extend(['--', '--'])
             if cadence:
                 if exercise.cadence:
-                    cadence_str = f'{exercise.cadence[0]}, {exercise.cadence[1]}, {exercise.cadence[2]}'
+                    cadence_str = (f'{exercise.cadence[0]}, '
+                                   f'{exercise.cadence[1]}, '
+                                   f'{exercise.cadence[2]}')
                     sheet_row.append(cadence_str)
                     table_row.append(cadence_str)
                 else:
@@ -483,18 +485,22 @@ def print_training_plan():
                 else:
                     sheet_row.append('--')
                     table_row.append('--')
-            SHEET.worksheet('Training Table').append_row(sheet_row)  # add row to google sheet
+            SHEET.worksheet('Training Table').append_row(sheet_row)
             table_rows.append(table_row)
             sheet_row = []  # reset sheet_row for the next exercise
             table_row = []  # reset table_row for the next exercise
 
     # create table for terminal
-    table = tabulate(table_rows, headers = table_headers, tablefmt = "fancy_grid", stralign = ("center"), numalign = ("center"))
+    table = tabulate(table_rows, headers=table_headers,
+                     tablefmt="fancy_grid", stralign=("center"),
+                     numalign=("center"))
     print(f'\n{table}')
 
     # notify user that not all data were printed to the terminal
-    print(f'\nThis table does not shows Reps and Weight data due to display width limits.\nYou can view the complete table in google sheet:\n{sheet_tinyurl} -> worksheet: "Training Table"')
-    
+    print(f'\nThis table does not shows Reps and Weight data due \
+    to display width limits.\nYou can view the complete table in \
+    google sheet:\n{sheet_tinyurl} -> worksheet: "Training Table"')
+
     return
 
 
@@ -506,9 +512,13 @@ def print_calculated_values():
     """
     worksheet = 'Training Metrics'
     SHEET.worksheet(worksheet).clear()  # clear worksheet
-    sheet_headers = ["Muscle\nGroup", "Volume\n(kg)", "Time Under\nTension (s)"]
-    table_headers = ["Muscle\nGroup", "Volume\n(kg)", "Time Under\nTension (s)"]
-    SHEET.worksheet(worksheet).append_row(sheet_headers)  # add headers row to google sheet
+    sheet_headers = ["Muscle\nGroup",
+                     "Volume\n(kg)",
+                     "Time Under\nTension (s)"]
+    table_headers = ["Muscle\nGroup",
+                     "Volume\n(kg)",
+                     "Time Under\nTension (s)"]
+    SHEET.worksheet(worksheet).append_row(sheet_headers)
 
     sheet_row = []
     table_rows = []
@@ -518,12 +528,15 @@ def print_calculated_values():
         tot_session_time += group_time
         sheet_row.extend([group.name, volume, tut])
         table_rows.append([group.name, volume, tut])
-        SHEET.worksheet(worksheet).append_row(sheet_row)  # add row to google sheet
+        SHEET.worksheet(worksheet).append_row(sheet_row)
         sheet_row = []  # reset sheet_row for next row in google sheet
-    table = tabulate(table_rows, headers = table_headers, tablefmt = "fancy_grid", stralign = ("center"), numalign = ("center"))
+    table = tabulate(table_rows, headers=table_headers,
+                     tablefmt="fancy_grid", stralign=("center"),
+                     numalign=("center"))
     print(f'\n{table}')
     print(f'\nTotal Duration Of Training: {tot_session_time}(s)')
-    print(f'\nYou can also view this table in google sheet:\n{sheet_tinyurl} -> worksheet: "Training Metrics"')
+    print(f'\nYou can also view this table in google sheet:\n\
+    {sheet_tinyurl} -> worksheet: "Training Metrics"')
     return
 
 

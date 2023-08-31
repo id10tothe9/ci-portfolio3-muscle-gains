@@ -84,46 +84,147 @@ In order to make sure that all user input is valid and errors are handled gracef
         <td>Main Menu</td>
         <td>1, 2 or 3</td>
         <td>4</td>
-        <td><img src=/img/manual_testing/1.png alt="Error 1"></td>
+        <td><img src=/img/manual_testing/2.png alt="Error 2"></td>
         <td>Pass</td>
     </tr>
     <tr>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td><img src=/img/manual_testing/1.png alt="Error 1"></td>
+        <td>Enter name of muscle group</td>
+        <td>4 characters or more</td>
+        <td>ffz</td>
+        <td><img src=/img/manual_testing/3.png alt="Error 3"></td>
         <td>Pass</td>
     </tr>
     <tr>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td><img src=/img/manual_testing/1.png alt="Error 1"></td>
+        <td>Enter name of exercise</td>
+        <td>4 characters or more</td>
+        <td>12u</td>
+        <td><img src=/img/manual_testing/4.png alt="Error 4"></td>
         <td>Pass</td>
     </tr>
     <tr>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td><img src=/img/manual_testing/1.png alt="Error 1"></td>
+        <td>How many sets?</td>
+        <td>a positive integer</td>
+        <td>ui</td>
+        <td><img src=/img/manual_testing/5.png alt="Error 5"></td>
+        <td>Pass</td>
+    </tr>
+    <tr>
+        <td>How many sets?</td>
+        <td>a positive integer</td>
+        <td>2.5</td>
+        <td><img src=/img/manual_testing/6.png alt="Error 6"></td>
+        <td>Pass</td>
+    </tr>
+    <tr>
+        <td>Number of repetitions</td>
+        <td>a positive integer</td>
+        <td>ui</td>
+        <td><img src=/img/manual_testing/7.png alt="Error 7"></td>
+        <td>Pass</td>
+    </tr>
+    <tr>
+        <td>Number of repetitions</td>
+        <td>a positive integer</td>
+        <td>2.3</td>
+        <td><img src=/img/manual_testing/8.png alt="Error 8"></td>
+        <td>Pass</td>
+    </tr>
+    <tr>
+        <td>Number of repetitions</td>
+        <td>a positive integer</td>
+        <td>-2</td>
+        <td><img src=/img/manual_testing/9.png alt="Error 9"></td>
+        <td>Pass</td>
+    </tr>
+    <tr>
+        <td>Weight in kg</td>
+        <td>a positiv float</td>
+        <td>test</td>
+        <td><img src=/img/manual_testing/10.png alt="Error 10"></td>
+        <td>Pass</td>
+    </tr>
+    <tr>
+        <td>Weight in kg</td>
+        <td>a positiv float</td>
+        <td>-20</td>
+        <td><img src=/img/manual_testing/11.png alt="Error 11"></td>
+        <td>Pass</td>
+    </tr>
+    <tr>
+        <td>Cadence values</td>
+        <td>three comma- or space-separated numbers</td>
+        <td>2, 4 j</td>
+        <td><img src=/img/manual_testing/12.png alt="Error 12"></td>
+        <td>Pass</td>
+    </tr>
+    <tr>
+        <td>Cadence values</td>
+        <td>three comma- or space-separated numbers</td>
+        <td>4 4 2 2</td>
+        <td><img src=/img/manual_testing/13.png alt="Error 13"></td>
+        <td>Pass</td>
+    </tr>
+    <tr>
+        <td>Resting duration</td>
+        <td>a positiv integer</td>
+        <td>zzz</td>
+        <td><img src=/img/manual_testing/14.png alt="Error 14"></td>
+        <td>Pass</td>
+    </tr>
+    <tr>
+        <td>Add another exercise?</td>
+        <td>yes or no</td>
+        <td>haha yes sure</td>
+        <td><img src=/img/manual_testing/15.png alt="Error 15"></td>
+        <td>Pass</td>
+    </tr>
+    <tr>
+        <td>Add new muscle group or choose one</td>
+        <td>1 for new group or option number of an available group</td>
+        <td>3 (outside of options range)</td>
+        <td><img src=/img/manual_testing/16.png alt="Error 16"></td>
+        <td>Pass</td>
+    </tr>
+    <tr>
+        <td>Add new muscle group or choose one</td>
+        <td>1 for new group or option number of an available group</td>
+        <td>Back</td>
+        <td><img src=/img/manual_testing/17.png alt="Error 17"></td>
         <td>Pass</td>
     </tr>
 </table>
 
---- | --- | --- | ---
- |  |  |  | Pass
-Enter name of muscle group | 4 characters or more | ffz | ![Error 3](/img/manual_testing/3.png)  | Pass
-Enter name of exercise | 4 characters or more | 12u | ![Error 4](/img/manual_testing/4.png)  | Pass
-How many sets? | a positive integer | ui | ![Error 5](/img/manual_testing/5.png)  | Pass
-How many sets? | a positive integer | 2.5 | ![Error 6](/img/manual_testing/6.png)  | Pass
-Number of repetitions | a positive integer | ui | ![Error 7](/img/manual_testing/7.png)  | Pass
-Number of repetitions | a positive integer | 2.3 | ![Error 8](/img/manual_testing/8.png)  | Pass
-Number of repetitions | a positive integer | -2 | ![Error 9](/img/manual_testing/9.png)  | Pass
-Weight in kg | a positiv float | test | ![Error 10](/img/manual_testing/10.png)  | Pass
-Weight in kg | a positiv float | -20 | ![Error 11](/img/manual_testing/11.png)  | Pass
-Cadence values | three comma- or space-separated numbers | 2, 4 j | ![Error 12](/img/manual_testing/12.png)  | Pass
-Cadence values | three comma- or space-separated numbers | 4 4 2 2 | ![Error 13](/img/manual_testing/13.png)  | Pass
-Resting duration | a positiv integer | zzz | ![Error 14](/img/manual_testing/14.png)  | Pass
-Add another exercise? | yes or no | haha yes sure | ![Error 15](/img/manual_testing/15.png)  | Pass
-Add new muscle group or choose one | 1 for new group or option number of an available group | 3 (outside of options range) | ![Error 16](/img/manual_testing/16.png)  | Pass
-Add new muscle group or choose one | 1 for new group or option number of an available group | Back | ![Error 17](/img/manual_testing/17.png)  | Pass
+Bugs discovered: table printed to terminal was long for long exercise names and does not fit in the 80 character terminal limit ➝ remove all Reps x Weight columns.
+
+### Validator Testing
+The [PEP8 online check](https://pep8ci.herokuapp.com/#) provided by CodeInstitute was used to validate the Python code. The error messages were handled until all code was clean.
+[PEP8 validation before](/img/validation_pep8_before.png)
+[PEP8 validation after](/img/validation_pep8_after.png)
+
+## Deployment
+This code was deployed using Code Institute's mock terminal for Heroku.
+Steps for deployment:
+- Fork or clone this repository
+- Create a new Heroku app
+- Go to the settings tab and choose 'config vars'
+- Add the Key: CREDS and copy your creds.json file content to the value field
+- Add the Key: PORT and its value 8000
+- Go to 'Build Packs' section and add a buildpack
+- Choose 'python' first, then repeat previous step and choose 'nodejs'
+- Under the 'Deploy' tab choose to deploy via GitHub and connect your project
+- Do a manual deploy and choose the automatic deploys option if desired
+
+## Technologies Used:
+- Python as a programming language
+- [GitHub]() for hosting the repository of the project
+- [GitPod]() for writing code and pushing it to GitHub
+- [Heroku]() for deployment of the application
+- [PEP8 online check]() to validate the python code
+- [tabulate](https://pypi.org/project/tabulate/) library to display tables in the terminal
+- [gspread](https://docs.gspread.org/en/latest/user-guide.html) and [google-oauth](https://pypi.org/project/google-oauth/) libraries to connect to google sheets and edit them
+- [Colorama](https://pypi.org/project/colorama/) and [termcolor](https://pypi.org/project/termcolor/) libraries to print the error messages in colours
+
+## Acknowledgement
+- My brother who is a personal trainer for the inspiration for the idea of this project
+- I wish to thank my mentor Marcel for his continuous guidance and encouragement!
+- Code Institute for all I've learned during this programme.
