@@ -26,19 +26,19 @@ The user interacts with the program through a text interface via a terminal. The
     3. Display calculated metrics
 - Choosing the first option: the user is guided through a series of prompts to enter the required data for each new exercise. All data is validated and if not valid, the user is notified with a clarifying message (in red) and asked to enter a new response.
 - Edit available plan: the user can continue editing their plan after returning to the main menu by choosing option 1 again. In that case they're asked if they want to start a new plan or continue with the current one.
-![Edit plan or start a new one](/img/features/edit_plan_or_start_new.png)
+![Edit plan or start a new one](/img/edit_plan_or_start_new.png)
 - The training plan consists of muscle groups, each muscle group can contain several exercises. Each exercise contains: number of sets, repetitions and weight for each set, cadence and rest duration.
     - A set is one continuous session of moving a specified weight repeatedly for a number of times (repetitions).
     - Cadence consists of three numbers which describe the time needed for contraction, a pause and then extension of the muscle in each set of the exercise.
     - Rest duration: the time given for a resting period after executing one set.
 - Not all data is required, in that case the user can skip entering the data and the related metrics will not be calculated as a result.
-![Skip entering a value](/img/features/skip_entering_value.png)
+![Skip entering a value](/img/skip_entering_value.png)
 - If the user chooses to enter a new muscle group, but enters a name that already exists, the app recognises that and uses the available object instead of creating a new one. The user is notified accordingly.
 ![Entering an existent group name](/img/manual_testing/18.png)
 - Choosing the second option: the training plan will be put into a table and displayed to the user. Due to the 80 characters limit of the terminal, the Reps and Weights will not be displayed, but the entire data is saved to google sheet. The user is notified as such.
     - App is designed for only one user in mind, so right now the data is being saved to one google sheet and overwritten when the user enters a new plan.
-    ![Training plan in terminal](/img/features/table_terminal.png)
-    ![Training plan in google sheet](/img/features/table_sheet.png)
+    ![Training plan in terminal](/img/table_terminal.png)
+    ![Training plan in google sheet](/img/table_sheet.png)
 - For missing data, the cells will be filled with '--' to indicate that no data is present here. See screenshot of google sheet above.
 - Choosing the third option, the training metrics are calculated and displayed in a table to the terminal and also saved to google sheet in a separate worksheet. The following metrics are calculated for each muscle group:
     - Volume: describes the total weight that has been lifted and is calculated as:
@@ -50,8 +50,8 @@ The user interacts with the program through a text interface via a terminal. The
     - Total session duration: describes the total amount of time needed for doing all exercises of a muscle group:
 
         $Session Duration = Time Under Tension + (Sets * Rest Duration)$
-    ![Metrics table in terminal](/img/features/metrics_terminal.png)
-    ![Metrics table in google sheets](/img/features/metrics_sheet.png)
+    ![Metrics table in terminal](/img/metrics_terminal.png)
+    ![Metrics table in google sheets](/img/metrics_sheet.png)
 
 ### Data Model
 An object oriented programming approach was used to save and process the data entered by the user. The main class is called MuscleGroup which defines a separate object for each muscle group the user enters. This in turn contains a dictionary of objects of the class Exercise, with each Exercise object describing one exercise row entered by the user. Here is a diagram to show each of these objects along with their attributes and methods:
