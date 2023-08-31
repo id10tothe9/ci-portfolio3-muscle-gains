@@ -26,6 +26,7 @@ The user interacts with the program through a text interface via a terminal. The
     3. Display calculated metrics
 - Choosing the first option: the user is guided through a series of prompts to enter the required data for each new exercise. All data is validated and if not valid, the user is notified with a clarifying message (in red) and asked to enter a new response.
 - Edit available plan: the user can continue editing their plan after returning to the main menu by choosing option 1 again. In that case they're asked if they want to start a new plan or continue with the current one.
+
 ![Edit plan or start a new one](/img/edit_plan_or_start_new.png)
 
 - The training plan consists of muscle groups, each muscle group can contain several exercises. Each exercise contains: number of sets, repetitions and weight for each set, cadence and rest duration.
@@ -58,7 +59,7 @@ The user interacts with the program through a text interface via a terminal. The
     ![Metrics table in terminal](/img/metrics_terminal.png)
 
     ![Metrics table in google sheets](/img/metrics_sheet.png)
-    
+
 
 ### Data Model
 An object oriented programming approach was used to save and process the data entered by the user. The main class is called MuscleGroup which defines a separate object for each muscle group the user enters. This in turn contains a dictionary of objects of the class Exercise, with each Exercise object describing one exercise row entered by the user. Here is a diagram to show each of these objects along with their attributes and methods:
