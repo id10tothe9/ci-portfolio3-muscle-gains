@@ -273,7 +273,7 @@ def get_group(training_plan):
             If user enters name of a group that already exists,
             let them know and use it instead
             """
-            if training_plan.get(group.name) !None:
+            if training_plan.get(group.name) is not None:
                 print(f'\nYou have already entered this muscle group!\n\
                 Will be adding the exercise to it :)\nChosen muscle group: \
                 {group.name}')
