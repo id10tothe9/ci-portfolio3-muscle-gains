@@ -210,7 +210,9 @@ Bugs discovered: table printed to terminal was long for long exercise names and 
 
 ### Validator Testing
 The [PEP8 online check](https://pep8ci.herokuapp.com/#) provided by CodeInstitute was used to validate the Python code. The error messages were handled until all code was clean.
+
 [PEP8 validation before](/img/validation_pep8_before.png)
+
 [PEP8 validation after](/img/validation_pep8_after.png)
 
 ## Deployment
