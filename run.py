@@ -407,7 +407,7 @@ def print_training_plan():
     # header row for google sheet
     sheet_headers = ["Muscle\nGroup", "Exercise", "Sets"]
     # header row for terminal table
-    table_headers = ["Muscle\nGroup", "Exercise", "Sets", "Reps", "Weight\n(kg)"]
+    table_headers = ["Muscle\nGroup", "Exercise", "Sets"]
 
     # Add all Reps and Weight columns to sheet but not to terminal table
     for set_number in range(1, most_sets+1):
@@ -434,8 +434,6 @@ def print_training_plan():
         for exercise in group.exercises.values(): # group.exercises is a dict containing the exercise objects
             sheet_row.extend([group.name, exercise.name, exercise.sets])
             table_row.extend([group.name, exercise.name, exercise.sets])
-            # add only first set data to terminal table
-            table_row.extend(exercise.reps_and_weights[0])
             # Add all Reps and Weight columns to sheet
             for reps_and_weights in exercise.reps_and_weights:
                 sheet_row.extend(reps_and_weights)
@@ -466,11 +464,9 @@ def print_training_plan():
     table = tabulate(table_rows, headers = table_headers, tablefmt = "fancy_grid", stralign = ("center"), numalign = ("center"))
     print(f'\n{table}')
 
-    # notify user if not all data were printed to the terminal
-    if most_sets > 1:
-        print(f'\nThis table shows Reps and Weight for the first set only due to display limits.\nYou can view the complete table in google sheet:\n{sheet_tinyurl} -> worksheet: "Training Table"')
-    else:
-        print(f'\nYou can also view this table in google sheet:\n{sheet_tinyurl} -> worksheet: "Training Table"')
+    # notify user that not all data were printed to the terminal
+    print(f'\nThis table does not shows Reps and Weight data due to display width limits.\nYou can view the complete table in google sheet:\n{sheet_tinyurl} -> worksheet: "Training Table"')
+    
     return
 
 
