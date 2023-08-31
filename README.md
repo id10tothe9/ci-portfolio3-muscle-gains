@@ -64,22 +64,66 @@ The possible paths of the algorithm are depicted in the following flowchart. It 
 ## Testing
 In order to make sure that all user input is valid and errors are handled gracefully, a validation function was used through which all user input is sent along with specific criteria it needs to fulfil. In case of an error, the user is notified of the reason and prompted to enter the data in the correct format.
 ### Manual Testing
-User Prompt | Required Format | Invalid Test Input | Error Handling Message | Test
+
+<table>
+    <tr>
+        <th>User Prompt</th>
+        <th>Required Format</th>
+        <th>Invalid Test Input</th>
+        <th>Error Handling Message</th>
+        <th>Test</th>
+    </tr>
+    <tr>
+        <td>Main Menu</td>
+        <td>1, 2 or 3</td>
+        <td>kj</td>
+        <td><img src=/img/manual_testing/1.png alt="Error 1"></td>
+        <td>Pass</td>
+    </tr>
+    <tr>
+        <td>Main Menu</td>
+        <td>1, 2 or 3</td>
+        <td>4</td>
+        <td><img src=/img/manual_testing/1.png alt="Error 1"></td>
+        <td>Pass</td>
+    </tr>
+    <tr>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td><img src=/img/manual_testing/1.png alt="Error 1"></td>
+        <td>Pass</td>
+    </tr>
+    <tr>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td><img src=/img/manual_testing/1.png alt="Error 1"></td>
+        <td>Pass</td>
+    </tr>
+    <tr>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td><img src=/img/manual_testing/1.png alt="Error 1"></td>
+        <td>Pass</td>
+    </tr>
+</table>
+
 --- | --- | --- | ---
-Main Menu | 1, 2 or 3 | kj | ![Error 1](/img/manual_testing/1.png) | Pass
-Main Menu | 1, 2 or 3 | 4 | ![Error 2](/img/manual_testing/2.png) | Pass
+ |  |  |  | Pass
 Enter name of muscle group | 4 characters or more | ffz | ![Error 3](/img/manual_testing/3.png)  | Pass
 Enter name of exercise | 4 characters or more | 12u | ![Error 4](/img/manual_testing/4.png)  | Pass
-How many sets? | a positive integer | ui | ![Error 1](/img/manual_testing/1.png)  | Pass
-How many sets? | a positive integer | 2.5 | ![Error 1](/img/manual_testing/1.png)  | Pass
-Number of repetitions | a positive integer | ui | ![Error 1](/img/manual_testing/1.png)  | Pass
-Number of repetitions | a positive integer | 2.3 | ![Error 1](/img/manual_testing/1.png)  | Pass
-Number of repetitions | a positive integer | -2 | ![Error 1](/img/manual_testing/1.png)  | Pass
-Weight in kg | a positiv float | test | ![Error 1](/img/manual_testing/1.png)  | Pass
-Weight in kg | a positiv float | -20 | ![Error 1](/img/manual_testing/1.png)  | Pass
-Cadence values | three comma- or space-separated numbers | 2, 4 j | ![Error 1](/img/manual_testing/1.png)  | Pass
-Cadence values | three comma- or space-separated numbers | 4 4 2 2 | ![Error 1](/img/manual_testing/1.png)  | Pass
-Resting duration | a positiv integer | zzz | ![Error 1](/img/manual_testing/1.png)  | Pass
-Add another exercise? | yes or no | haha yes sure | ![Error 1](/img/manual_testing/1.png)  | Pass
-Add new muscle group or choose one | 1 for new group or option number of an available group | 3 (outside of options range) | ![Error 1](/img/manual_testing/1.png)  | Pass
-Add new muscle group or choose one | 1 for new group or option number of an available group | Back | ![Error 1](/img/manual_testing/1.png)  | Pass
+How many sets? | a positive integer | ui | ![Error 5](/img/manual_testing/5.png)  | Pass
+How many sets? | a positive integer | 2.5 | ![Error 6](/img/manual_testing/6.png)  | Pass
+Number of repetitions | a positive integer | ui | ![Error 7](/img/manual_testing/7.png)  | Pass
+Number of repetitions | a positive integer | 2.3 | ![Error 8](/img/manual_testing/8.png)  | Pass
+Number of repetitions | a positive integer | -2 | ![Error 9](/img/manual_testing/9.png)  | Pass
+Weight in kg | a positiv float | test | ![Error 10](/img/manual_testing/10.png)  | Pass
+Weight in kg | a positiv float | -20 | ![Error 11](/img/manual_testing/11.png)  | Pass
+Cadence values | three comma- or space-separated numbers | 2, 4 j | ![Error 12](/img/manual_testing/12.png)  | Pass
+Cadence values | three comma- or space-separated numbers | 4 4 2 2 | ![Error 13](/img/manual_testing/13.png)  | Pass
+Resting duration | a positiv integer | zzz | ![Error 14](/img/manual_testing/14.png)  | Pass
+Add another exercise? | yes or no | haha yes sure | ![Error 15](/img/manual_testing/15.png)  | Pass
+Add new muscle group or choose one | 1 for new group or option number of an available group | 3 (outside of options range) | ![Error 16](/img/manual_testing/16.png)  | Pass
+Add new muscle group or choose one | 1 for new group or option number of an available group | Back | ![Error 17](/img/manual_testing/17.png)  | Pass
