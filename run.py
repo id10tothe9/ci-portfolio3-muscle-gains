@@ -358,14 +358,14 @@ class Exercise():
 
     # get the cadence values (a set of three numbers) in seconds
     def get_cadence(self):
-        message = 'Cadence: enter the duration of the contraction, pause and extension\n of the muscle in that order as comma (or space) separated numbers:\ne.g. 2, 0, 4\n\nYou can skip this value by pressing enter instead.'
+        message = 'Cadence (in seconds): enter the duration of the contraction, pause and extension\n of the muscle in that order as comma (or space) separated numbers:\ne.g. 2, 0, 4\n\nYou can skip this value by pressing enter instead.'
         cadence = get_user_input(message, ['can skip', 'cadence'])
         if cadence != '':
             self.cadence = cadence
     
-    # Get the resting duration after the entire exercise in seconds
+    # Get the resting duration after the exercise set in seconds
     def get_rest(self):
-        message = 'How long should the resting duration be after this exercise?\n\nYou can skip this value by pressing enter instead.'
+        message = 'Please enter the resting duration after each set in seconds?\n\nYou can skip this value by pressing enter instead.'
         rest = get_user_input(message, ['can skip', 'positive integer'])
         if rest != '':
             self.rest = rest
