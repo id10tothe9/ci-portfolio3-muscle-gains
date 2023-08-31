@@ -250,14 +250,16 @@ def create_training_plan():
 
 def get_group(training_plan):
     """
-    This function constructs a MuscleGroup object which will contain the user's data
-    for exercises in a muscle group. If other MuscleGroup objects already exist, ask
-    the user to choose from them or to create a new muscle group.
+    This function constructs a MuscleGroup object which will
+    contain the user's data for exercises in a muscle group.
+    If other MuscleGroup objects already exist, ask the user
+    to choose from them or to create a new muscle group.
     """
     if training_plan != {}:  # other MuscleGroup objects already exist
         i = 1
         group_names = []
-        message = 'Choose an option to enter a new muscle group or use an exsistent one:\n'
+        message = ('Choose an option to enter a new muscle group or '
+                   'use an exsistent one:\n')
         message += f'{i}. New muscle group'
         for group_name in training_plan:
             i += 1
@@ -267,13 +269,18 @@ def get_group(training_plan):
         if user_input == 1:  # user chooses to create a new muscle group
             group = MuscleGroup()
             group.get_name()
-            # if user enters name of a group that already exists, let them know and use it instead
-            if training_plan.get(group.name) != None:
-                print(f'\nYou have already entered this muscle group!\nWill be adding the exercise to it :)\nChosen muscle group: {group.name}')
+            """
+            If user enters name of a group that already exists,
+            let them know and use it instead
+            """
+            if training_plan.get(group.name) !None:
+                print(f'\nYou have already entered this muscle group!\n\
+                Will be adding the exercise to it :)\nChosen muscle group: \
+                {group.name}')
                 group = training_plan[group.name]
         else:  # user chooses to use a muscle group that already exists
             group = training_plan[group_names[user_input-2]]
-    else:  # in case no muscle group has been created before just create a new one
+    else:  # in case no muscle group exists just create a new one
         group = MuscleGroup()
         group.get_name()
     return group
@@ -318,7 +325,7 @@ class MuscleGroup():
         A method to calculate volume of the muscle group.
         """
         volume = 0
-        tut = 0  # stands for 'time under tension': time during which the muscles are under tension
+        tut = 0  # 'time under tension': time where muscles are under tension
         exercise_time = 0  # total time of exercise
         total_reps = 0  # to get total number of repetitions in an exercise
         rest_time = 0  # time of resting after each exercises
@@ -326,12 +333,13 @@ class MuscleGroup():
             for rnw in exercise.reps_and_weights:
                 volume += rnw[0]*rnw[1]
                 total_reps += rnw[0]
-            if exercise.cadence !=[]:
+            if exercise.cadence != []:
                 tut += total_reps * (exercise.cadence[0] + exercise.cadence[2])
                 exercise_time = tut + (total_reps * exercise.cadence[1])
             if exercise.rest != '':
                 rest_time += exercise.rest
-        group_time = exercise_time + rest_time  # total duration of training in this group
+        # total duration of training in this group
+        group_time = exercise_time + rest_time
 
         return volume, tut, group_time
 
@@ -349,14 +357,18 @@ class Exercise():
         self.rest = ''
 
     def get_name(self):
-        message = 'Enter name of the exercise\n(e.g. Curls, Front Squats, French press)'
+        message = 'Enter name of the exercise\n\
+        (e.g. Curls, Front Squats, French press)'
         self.name = get_user_input(message, ['name'])
-  
+
     def get_sets(self):
         message = 'How many sets?'
         self.sets = get_user_input(message, ['positive integer', 'minimum 1'])
 
-    def get_reps_and_weights(self):  # get data for repetitions and weight for each set
+    def get_reps_and_weights(self):
+        """
+        Get data for repetitions and weight for each set
+        """
         for set in range(self.sets):
             message = f'How many repetitions (Reps) in set Nr. {set+1}'
             reps = get_user_input(message, ['positive integer', 'minimum 1'])
@@ -366,14 +378,18 @@ class Exercise():
 
     # get the cadence values (a set of three numbers) in seconds
     def get_cadence(self):
-        message = 'Cadence (in seconds): enter the duration of the contraction, pause and extension\n of the muscle in that order as comma (or space) separated numbers:\ne.g. 2, 0, 4\n\nYou can skip this value by pressing enter instead.'
+        message = 'Cadence (in seconds): enter the duration of the \
+        contraction, pause and extension\n of the muscle in that \
+        order as comma (or space) separated numbers:\ne.g. 2, 0, 4\
+        \n\nYou can skip this value by pressing enter instead.'
         cadence = get_user_input(message, ['can skip', 'cadence'])
         if cadence != '':
             self.cadence = cadence
 
     # Get the resting duration after the exercise set in seconds
     def get_rest(self):
-        message = 'Please enter the resting duration after each set in seconds?\n\nYou can skip this value by pressing enter instead.'
+        message = 'Please enter the resting duration after each set \
+        in seconds?\n\nYou can skip this value by pressing enter instead.'
         rest = get_user_input(message, ['can skip', 'positive integer'])
         if rest != '':
             self.rest = rest
@@ -381,25 +397,27 @@ class Exercise():
 
 def print_training_plan():
     """
-    This function fetches all exercise data from all muscle groups, orders them into lists
-    and prints them out to the terminal as a table using the tabulate library.
+    This function fetches all exercise data from all muscle groups,
+    orders them into lists and prints them out to the terminal as a
+    table using the tabulate library.
     It also saves them into google sheet for better usability.
     """
     global training_plan
 
-    most_sets = 0  # will register the highest number of sets in order to set all rows to equal lengths
+    most_sets = 0  # register the highest number of sets
     cadence = False
     rest = False
     """
-    In this cascading for loop we only count the highest number of sets and register
-    whether cadence and rest variables were entered by the user. We will use this
-    information to set equal row lengths for all exercises.
+    In this cascading for loop we only count the highest number of
+    sets and register whether cadence and rest variables were entered
+    by the user. We will use this information to set equal row lengths
+    for all exercises.
     """
-    for group in training_plan.values():  # training_plan is a dictionary containing the muscle_group objects
-        for exercise in group.exercises.values():  # group.exercises is a dict containing the exercise objects
+    for group in training_plan.values():
+        for exercise in group.exercises.values():
             if exercise.sets > most_sets:  # get the highest number of sets
                 most_sets = exercise.sets
-            if exercise.cadence !=[]:
+            if exercise.cadence != []:
                 cadence = True
             if exercise.rest != '':
                 rest = True
@@ -419,7 +437,9 @@ def print_training_plan():
 
     # Add all Reps and Weight columns to sheet but not to terminal table
     for set_number in range(1, most_sets+1):
-        sheet_headers.extend([f'Set{set_number}\nReps', f'Set{set_number}\nWeight\n(kg)'])
+        sheet_headers.extend(
+            [f'Set{set_number}\nReps', f'Set{set_number}\nWeight\n(kg)']
+            )
     # add cadence and rest columns if entered by the user
     if cadence:
         sheet_headers.append('Cadence\n(s)')
@@ -438,8 +458,8 @@ def print_training_plan():
     sheet_row = []
     table_row = []
     table_rows = []
-    for group in training_plan.values():  # training_plan is a dictionary containing the muscle_group objects
-        for exercise in group.exercises.values():  # group.exercises is a dict containing the exercise objects
+    for group in training_plan.values():
+        for exercise in group.exercises.values():
             sheet_row.extend([group.name, exercise.name, exercise.sets])
             table_row.extend([group.name, exercise.name, exercise.sets])
             # Add all Reps and Weight columns to sheet
