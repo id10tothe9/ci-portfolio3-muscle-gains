@@ -4,6 +4,10 @@ from termcolor import colored
 import gspread
 from google.oauth2.service_account import Credentials
 
+
+"""
+Define needed variables to access google sheet and write data.
+"""
 SCOPE = [
     "https://www.googleapis.com/auth/spreadsheets",
     "https://www.googleapis.com/auth/drive.file",
@@ -18,6 +22,11 @@ sheet_tinyurl = 'https://tinyurl.com/mr2cfuv8'
 
 
 def get_lines_str(message, symb):
+    """
+    Return a separator line with symbol symb (- or +)
+    to be printed before or after the prompt for the user.
+    Its length is determined by the longest line in the message.
+    """
     message_lines = message.split('\n')
     str_len = 0
     for line in message_lines:
@@ -29,11 +38,20 @@ def get_lines_str(message, symb):
 
 
 def get_message(message):
+    """
+    Add the separator lines before and after the message
+    that's to be shown to the user.
+    """
     lines_str = get_lines_str(message, '-')
     plus_str = get_lines_str(message, '+')
     return f'\n{plus_str}\n{message}\n{lines_str}\n'
 
 def welcome_message():
+    """
+    Return the welcome message that's to be printed at the start
+    of the user's interaction with the app. It explains the purpose
+    of the app and how to interact with it.
+    """
     message = "Welcome To Muscle Gains!\n\n\
     This application is meant for a training instructor.\n\
     It will help you design training plans for your customers.\n\n\
@@ -48,6 +66,9 @@ def welcome_message():
 
 
 def main_menu_message():
+    """
+    Return the main menu options text that will be printed for the user.
+    """
     message = 'Please choose an option:\n\
     1. Create a training plan\n\
     2. Display current training plan\n\
@@ -57,6 +78,10 @@ def main_menu_message():
 
 
 def color_error_message(message):
+    """
+    Use the termcolor library to style error messages for the user
+    with a red background.
+    """
     return colored(message, 'white', 'on_red')
 
 def check_input(user_input, requirements_list):
@@ -64,20 +89,22 @@ def check_input(user_input, requirements_list):
     This function takes in the user_input and a list of requirements
     the input must fulfil. Depending on the requirements list, it checks
     if the input is valid. If it's not valid it returns an appropriate
-    response, otherwise it returns an empty string.
+    error message for the user, otherwise it returns the processed user_input.
     """
     error_message = ''
     for req in requirements_list:
-        if req == 'can skip': # in case user decides to skip entering values
+        if req == 'can skip': # user can skip entering some values
             if user_input == '':
                 break
-        elif req == 'name':
+
+        elif req == 'name': # names must be at least 4 chars long
             try:
                 if len(user_input) < 4:
                     raise ValueError
             except ValueError:
                 error_message = '\nName must be at least 4 characters long!'
                 error_message = color_error_message(error_message)
+
         elif req == 'positive integer':
             try:
                 user_input = int(user_input)
@@ -98,12 +125,13 @@ def check_input(user_input, requirements_list):
                 error_message = color_error_message(error_message)
                 break
 
+        # Allows the user to choose a number only from the available options list
         elif type(req) == tuple and (user_input < req[0] or user_input > req[1]):
             error_message = f'\nPlease enter a value between {req[0]} and {req[1]}.'
             error_message = color_error_message(error_message)
             break
 
-        elif req == 'yes or no':
+        elif req == 'yes or no': # for yes or no answers
             try:
                 user_input = user_input.lower()
                 if len(user_input) > 3: # random strings that might contain yes or no are not valid
@@ -119,7 +147,7 @@ def check_input(user_input, requirements_list):
                 error_message = color_error_message(error_message)
                 break
 
-        
+        # validate that the user has entered exactly three numbers
         elif req == 'cadence': # input format required '2 4 5' or e.g. '2,4, 5'
             user_input, error_message = get_cadence_values(user_input)
             if error_message:
@@ -131,7 +159,7 @@ def check_input(user_input, requirements_list):
 def get_cadence_values(user_input):
     """
     This function expects three numbers separated by commas or spaces or both 
-    as they should be entered by the user. If those criteria are not fulfilled,
+    as they should be entered by the user. If these criteria are not met,
     an appropriate error message is presented.
     """
     error_message = ''
@@ -161,9 +189,10 @@ def get_cadence_values(user_input):
 
 def get_user_input(message, requirements_list):
     """
-    Handle all input requests: print out message to user, check
-    if their answer satisfies all requirements by calling the check_input
-    function. Return user_input if user answer is valid.
+    This function handles all input requests: print out prompt message to
+    user, check if their answer satisfies all requirements by calling the
+    check_input function. It keeps prompting the user with an appropriate
+    error message until the answer is valid.
     """
     while True:
         user_input = input(get_message(message))
@@ -177,26 +206,21 @@ def get_user_input(message, requirements_list):
 
 def create_training_plan():
     """
-    This function starts creating a new training plan. If an old plan
-    exists, it asks the user for confirmation to delete previous data.
+    This function creates a new training plan. If the user has already
+    created a plan, it asks the user for confirmation to delete previous
+    data or to continue modifying current plan.
     """
-    # if a training table already exists, ask user if they're sure
-    #   they want to delete the current table and construct a new one
-    #   If user says yes, delete all current objects and data first.
     global training_plan
 
-
-    if training_plan != {}:
+    if training_plan != {}: # in case user has already created a training plan
         message = "You have already created a plan. Do you want to edit it or replace it?\nPlease choose an option:\n1. Add exercises to current training plan.\n2. Delete current plan and create a new one."
         user_input = get_user_input(message, ['positive integer', (1, 2)])
-        if user_input == 1:
+        if user_input == 1: # continue modifying current plan
             pass
-        else:
+        else: # delete old plan and create a new one
             training_plan = {}
 
-    # ask user to "enter a new muscle group or choose an existent group"
-    # get group name
-    # construct basic muscle group object
+    # construct muscle group objects and/or add exercises by prompting the user
     while True:
         group = get_group(training_plan)
         group.add_exercise(get_exercise())
@@ -217,7 +241,12 @@ def create_training_plan():
 
 
 def get_group(training_plan):
-    if training_plan != {}:
+    """
+    This function constructs a MuscleGroup object which will contain the user's data
+    for exercises in a muscle group. If other MuscleGroup objects already exist, ask
+    the user to choose from them or to create a new muscle group.
+    """
+    if training_plan != {}: # other MuscleGroup objects already exist
         i = 1
         group_names = []
         message = 'Choose an option to enter a new muscle group or use an exsistent one:\n'
@@ -227,21 +256,27 @@ def get_group(training_plan):
             group_names.append(group_name)
             message += f'\n{i}. {group_name}'
         user_input = get_user_input(message, ['positive integer', (1, i)])
-        if user_input == 1:
+        if user_input == 1: # user chooses to create a new muscle group
             group = MuscleGroup()
             group.get_name()
-            if training_plan.get(group.name) != None: # if group already exists use it instead
+            # if user enters name of a group that already exists, let them know and use it instead
+            if training_plan.get(group.name) != None:
                 print(f'\nYou have already entered this muscle group!\nWill be adding the exercise to it :)\nChosen muscle group: {group.name}')
                 group = training_plan[group.name]
-        else:
+        else: # user chooses to use a muscle group that already exists
             group = training_plan[group_names[user_input-2]]
-    else:
+    else: # in case no muscle group has been created before just create a new one
         group = MuscleGroup()
         group.get_name()
     return group
 
 
 def get_exercise():
+    """
+    Create an Exercise object and prompt user to define its data.
+    This object will then be added to the already constructed
+    MuscleGroup in create_training_plan().
+    """
     exercise = Exercise()
     exercise.get_name()
     exercise.get_sets()
@@ -253,11 +288,15 @@ def get_exercise():
 
 class MuscleGroup():
     """
-    A class that contains all exercise rows which belong to a given muscle group
+    This class defines muscle group objects. Thsse can contain several
+    Exercise objects to contain data for the rows of the training table
+    which belong to a given muscle group. This class also contains methods
+    to calculate the metrics needed for each muscle group from all contained
+    row data.
     """
     def __init__(self):
         self.name = ''
-        self.exercises = {} # MuscleGroup contains a dictionary of exercises
+        self.exercises = {} # each object contains a dictionary of exercises
   
     def get_name(self):
         message = 'Enter name of the muscle group\n(e.g. Biceps, Chest, Abs)'
@@ -268,7 +307,7 @@ class MuscleGroup():
   
     def calc_metrics(self):
         """
-        A method to calculate volume of the muscle group
+        A method to calculate volume of the muscle group.
         """
         volume = 0
         tut = 0 # stands for 'time under tension': time during which the muscles are under tension
@@ -291,9 +330,8 @@ class MuscleGroup():
 
 class Exercise():
     """
-    A Class who's objects represent one row of the training plan.
-    Each Object contains name of the exercise and its relevant metrics.
-    Each Exercise object belongs to a unique MuscleGroup.
+    This class defines objects which represent one row of the training plan.
+    Each Object contains the name of the exercise and its relevant metrics.
     """
     def __init__(self):
         self.name = ''
@@ -310,24 +348,23 @@ class Exercise():
         message = 'How many sets?'
         self.sets = get_user_input(message, ['positive integer', 'minimum 1'])
 
-    def get_reps_and_weights(self):
+    def get_reps_and_weights(self): # get data for repetitions and weight for each set
         for set in range(self.sets):
             message = f'How many repetitions (Reps) in set Nr. {set+1}'
             reps = get_user_input(message, ['positive integer', 'minimum 1'])
             message = f'Enter weight in kg for set Nr. {set+1}'
             weight = get_user_input(message, ['positive float'])
             self.reps_and_weights.append([reps, weight])
-  
+
+    # get the cadence values (a set of three numbers) in seconds
     def get_cadence(self):
         message = 'Cadence: enter the duration of the contraction, pause and extension\nin that order as comma (or space) separated numbers:\ne.g. 2, 0, 4\n\nYou can skip this value by pressing enter instead.'
         cadence = get_user_input(message, ['can skip', 'cadence'])
         if cadence != '':
             self.cadence = cadence
     
+    # Get the resting duration after the entire exercise in seconds
     def get_rest(self):
-        """
-        Get the resting duration after the exercise in seconds.
-        """
         message = 'How long should the resting duration be after this exercise?\n\nYou can skip this value by pressing enter instead.'
         rest = get_user_input(message, ['can skip', 'positive integer'])
         if rest != '':
@@ -336,44 +373,59 @@ class Exercise():
 
 def print_training_plan():
     """
-    This function fetches all exercise rows of defined muscle groups, orders them into lists
-    and prints them out with the prettytable library function.
+    This function fetches all exercise data from all muscle groups, orders them into lists
+    and prints them out to the terminal as a table using the tabulate library.
+    It also saves them into google sheet for better usability.
     """
     global training_plan
-    """
-    In this cascading for loop we only count the highest number of sets and register if cadence and rest variables were registered. We use this information to set equal row lengths for all exercises.
-    """
-    most_sets = 0 # Registers the highest number of sets in order to set all rows to equal lengths
+
+    most_sets = 0 # will register the highest number of sets in order to set all rows to equal lengths
     cadence = False
     rest = False
+    """
+    In this cascading for loop we only count the highest number of sets and register
+    whether cadence and rest variables were entered by the user. We will use this
+    information to set equal row lengths for all exercises.
+    """
     for group in training_plan.values(): # training_plan is a dictionary containing the muscle_group objects
         for exercise in group.exercises.values(): # group.exercises is a dict containing the exercise objects
-            if exercise.sets > most_sets:
+            if exercise.sets > most_sets: # get the highest number of sets
                 most_sets = exercise.sets
             if exercise.cadence !=[]:
                 cadence = True
             if exercise.rest != '':
                 rest = True
+
     """
-    Next we create the title row for the table. We reserve the required number of Reps x Weights columns depending on the highest number of sets in all exercises. We add the 'cadence' and 'rest' columns if they exist in any exercise.
+    Next we create the title row for the table. Due to the 80 character length
+    restriction on Heroku terminal, we will only print first Reps and Weights
+    columns to the terminal, while printing the rest of them to google sheet.
+    We add the 'cadence' and 'rest' columns if they exist in any exercise.
     """
-    SHEET.worksheet('Training Table').clear() # clear worksheet
+    # clear worksheet on google sheet
+    SHEET.worksheet('Training Table').clear()
+    # header row for google sheet
     sheet_headers = ["Muscle\nGroup", "Exercise", "Sets"]
+    # header row for terminal table
     table_headers = ["Muscle\nGroup", "Exercise", "Sets", "Reps", "Weight\n(kg)"]
-    for set_number in range(1, most_sets+1): # reserve a place holder for highest number of sets
+
+    # Add all Reps and Weight columns to sheet but not to terminal table
+    for set_number in range(1, most_sets+1):
         sheet_headers.extend([f'Set{set_number}\nReps', f'Set{set_number}\nWeight\n(kg)'])
-    # if most_sets > 1: # add place holder for further sets in terminal output
-    #             table_headers.append('more\nSets\n[..]')
+    # add cadence and rest columns if entered by the user
     if cadence:
         sheet_headers.append('Cadence\n(s)')
         table_headers.append('Cadence\n(s)')
     if rest:
         sheet_headers.append('Rest\n(s)')
         table_headers.append('Rest\n(s)')
-    SHEET.worksheet('Training Table').append_row(sheet_headers) # add row to google sheet
+
+    # add row to google sheet
+    SHEET.worksheet('Training Table').append_row(sheet_headers)
 
     """
-    Now we can populate the rows of the table. Where a value is missing we set the cell to '--'.
+    Now we can populate the rows of the table.
+    Where a value is missing we set the cell to '--'.
     """
     sheet_row = []
     table_row = []
@@ -382,14 +434,13 @@ def print_training_plan():
         for exercise in group.exercises.values(): # group.exercises is a dict containing the exercise objects
             sheet_row.extend([group.name, exercise.name, exercise.sets])
             table_row.extend([group.name, exercise.name, exercise.sets])
-            table_row.extend(exercise.reps_and_weights[0]) # add only first set data to terminal table
-            # if exercise.sets > 1: # add place holder for further sets in terminal table
-            #     table_row.append('[..]')
-            # else:
-            #     table_row.append('--')
+            # add only first set data to terminal table
+            table_row.extend(exercise.reps_and_weights[0])
+            # Add all Reps and Weight columns to sheet
             for reps_and_weights in exercise.reps_and_weights:
                 sheet_row.extend(reps_and_weights)
-            for set_number in range(exercise.sets, most_sets): # In case of empty values, fill cells with '--'
+            # In case of empty values, fill cells with '--'
+            for set_number in range(exercise.sets, most_sets):
                 sheet_row.extend(['--', '--'])
             if cadence:
                 if exercise.cadence:
@@ -411,8 +462,11 @@ def print_training_plan():
             sheet_row = [] # reset sheet_row for the next exercise
             table_row = [] # reset table_row for the next exercise
 
+    # create table for terminal
     table = tabulate(table_rows, headers = table_headers, tablefmt = "fancy_grid", stralign = ("center"), numalign = ("center"))
     print(f'\n{table}')
+
+    # notify user if not all data were printed to the terminal
     if most_sets > 1:
         print(f'\nThis table shows Reps and Weight for the first set only due to display limits.\nYou can view the complete table in google sheet:\n{sheet_tinyurl} -> worksheet: "Training Table"')
     else:
@@ -421,6 +475,11 @@ def print_training_plan():
 
 
 def print_calculated_values():
+    """
+    This function calculates the metrics of each muscle group
+    and prints them out in a table to the terminal. A copy is
+    also saved to google sheet.
+    """
     worksheet = 'Training Metrics'
     SHEET.worksheet(worksheet).clear() # clear worksheet
     sheet_headers = ["Muscle\nGroup", "Volume\n(kg)", "Time Under\nTension (s)"]
@@ -446,21 +505,30 @@ def print_calculated_values():
 
 
 def main_menu():
+    """
+    This function presents the user with the main menu options
+    to choose from. It presents them with the option to create a
+    training plan, print the training plan or calculate the metrics.
+    After each option that's executed the user is brought back
+    to the main menu again.
+    """
     while True:
         global training_plan
-        message = main_menu_message()
+
+        message = main_menu_message() # print main menu options to the user
+        # get user's choice as a number: 1, 2 or 3
         user_input = get_user_input(message, ['positive integer', (1, 3)])
-        if user_input == 1:
+        if user_input == 1: # option create training plan
             create_training_plan()
             print('\nThank you for your participation!')
-        elif user_input == 2:
-            if training_plan == {}:
+        elif user_input == 2: # option print out current plan
+            if training_plan == {}: # in case no plan has been created
                 message = "\nSorry, you didn't create a training plan yet!"
                 print(color_error_message(message))
             else:
                 print_training_plan()
-        elif user_input == 3:
-            if training_plan == {}:
+        elif user_input == 3: # option print out training metrics
+            if training_plan == {}: # in case no plan has been created
                 message = "\nSorry, you didn't create a training plan yet!"
                 print(color_error_message(message))
             else:
@@ -469,10 +537,17 @@ def main_menu():
 
 
 def main():
+    """
+    Print the welcome message and present the
+    main menu options to the user.
+    """
     print(welcome_message())
     main_menu()
 
 
-
+"""
+Define the training plan as a global variable for all functions
+to access independently, then call the main function.
+"""
 training_plan = {}
 main()
