@@ -221,9 +221,9 @@ def create_training_plan():
     global training_plan
 
     if training_plan != {}:  # in case user has already created a training plan
-        message = "You have already created a plan. Do you want to edit it or \
-        replace it?\nPlease choose an option:\n1. Add exercises to current \
-        training plan.\n2. Delete current plan and create a new one."
+        message = "You have already created a plan. Do you want to edit it or "\
+        "replace it?\nPlease choose an option:\n1. Add exercises to current "\
+        "training plan.\n2. Delete current plan and create a new one."
         user_input = get_user_input(message, ['positive integer', (1, 2)])
         if user_input == 1:  # continue modifying current plan
             pass
@@ -239,8 +239,8 @@ def create_training_plan():
         """
         Continue looping to add more exercises until user is done.
         """
-        message = "Do you want to add another exercise? \
-        Please type 'yes' or 'no'"
+        message = "Do you want to add another exercise? "\
+        "Please type 'yes' or 'no'"
         user_input = get_user_input(message, ['yes or no'])
         if user_input == 'no':
             break
@@ -274,9 +274,9 @@ def get_group(training_plan):
             let them know and use it instead
             """
             if training_plan.get(group.name) is not None:
-                print(f'\nYou have already entered this muscle group!\n\
-                Will be adding the exercise to it :)\nChosen muscle group: \
-                {group.name}')
+                print(f'\nYou have already entered this muscle group!\n'\
+                f'Will be adding the exercise to it :)\nChosen muscle group: '\
+                f'{group.name}')
                 group = training_plan[group.name]
         else:  # user chooses to use a muscle group that already exists
             group = training_plan[group_names[user_input-2]]
@@ -357,8 +357,8 @@ class Exercise():
         self.rest = ''
 
     def get_name(self):
-        message = 'Enter name of the exercise\n\
-        (e.g. Curls, Front Squats, French press)'
+        message = 'Enter name of the exercise\n'\
+        '(e.g. Curls, Front Squats, French press)'
         self.name = get_user_input(message, ['name'])
 
     def get_sets(self):
@@ -378,18 +378,18 @@ class Exercise():
 
     # get the cadence values (a set of three numbers) in seconds
     def get_cadence(self):
-        message = 'Cadence (in seconds): enter the duration of the \
-        contraction, pause and extension\n of the muscle in that \
-        order as comma (or space) separated numbers:\ne.g. 2, 0, 4\
-        \n\nYou can skip this value by pressing enter instead.'
+        message = 'Cadence (in seconds): enter the duration of the '\
+        'contraction, pause and extension\n of the muscle in that '\
+        'order as comma (or space) separated numbers:\ne.g. 2, 0, 4'\
+        '\n\nYou can skip this value by pressing enter instead.'
         cadence = get_user_input(message, ['can skip', 'cadence'])
         if cadence != '':
             self.cadence = cadence
 
     # Get the resting duration after the exercise set in seconds
     def get_rest(self):
-        message = 'Please enter the resting duration after each set \
-        in seconds?\n\nYou can skip this value by pressing enter instead.'
+        message = 'Please enter the resting duration after each set '\
+        'in seconds?\n\nYou can skip this value by pressing enter instead.'
         rest = get_user_input(message, ['can skip', 'positive integer'])
         if rest != '':
             self.rest = rest
@@ -497,9 +497,9 @@ def print_training_plan():
     print(f'\n{table}')
 
     # notify user that not all data were printed to the terminal
-    print(f'\nThis table does not shows Reps and Weight data due \
-    to display width limits.\nYou can view the complete table in \
-    google sheet:\n{sheet_tinyurl} -> worksheet: "Training Table"')
+    print(f'\nThis table does not shows Reps and Weight data due '\
+    f'to display width limits.\nYou can view the complete table in '\
+    f'google sheet:\n{sheet_tinyurl} -> worksheet: "Training Table"')
 
     return
 
@@ -535,8 +535,8 @@ def print_calculated_values():
                      numalign=("center"))
     print(f'\n{table}')
     print(f'\nTotal Duration Of Training: {tot_session_time}(s)')
-    print(f'\nYou can also view this table in google sheet:\n\
-    {sheet_tinyurl} -> worksheet: "Training Metrics"')
+    print(f'\nYou can also view this table in google sheet:\n'\
+    f'{sheet_tinyurl} -> worksheet: "Training Metrics"')
     return
 
 
