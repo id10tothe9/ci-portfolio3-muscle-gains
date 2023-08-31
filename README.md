@@ -26,7 +26,7 @@ The user interacts with the program through a text interface via a terminal. The
     3. Display calculated metrics
 - Choosing the first option: the user is guided through a series of prompts to enter the required data for each new exercise. All data is validated and if not valid, the user is notified with a clarifying message (in red) and asked to enter a new response.
 - Edit available plan: the user can continue editing their plan after returning to the main menu by choosing option 1 again. In that case they're asked if they want to start a new plan or continue with the current one.
-![Edit plan or start a new one](/img/edit_plan_or_start_new.png)
+![Edit plan or start a new one](img/edit_plan_or_start_new.png)
 - The training plan consists of muscle groups, each muscle group can contain several exercises. Each exercise contains: number of sets, repetitions and weight for each set, cadence and rest duration.
     - A set is one continuous session of moving a specified weight repeatedly for a number of times (repetitions).
     - Cadence consists of three numbers which describe the time needed for contraction, a pause and then extension of the muscle in each set of the exercise.
