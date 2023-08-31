@@ -32,8 +32,8 @@ def get_lines_str(message, symb):
     for line in message_lines:
         if len(line) > str_len:
             str_len = len(line)
-    if str_len > 80: # avoid separator lines longer than terminal char limit
-        str_len = 80    
+    if str_len > 80:  # avoid separator lines longer than terminal char limit
+        str_len = 80
     return f'{str_len*symb}'
 
 
@@ -45,6 +45,7 @@ def get_message(message):
     lines_str = get_lines_str(message, '-')
     plus_str = get_lines_str(message, '+')
     return f'\n{plus_str}\n{message}\n{lines_str}\n'
+
 
 def welcome_message():
     """
@@ -58,10 +59,10 @@ def welcome_message():
     The app will guide you to enter the required data for each exercise:\n\
     e.g. exercise name, number of sets, repetitions and weights\n\
     After that you can let it show you the plan you have created thus far,\n\
-    or let it calculate the metrics you need for each muscle group to help you\n\
-    in the design process.\n\n\
-    The data will be saved to a google sheet for your later review, and you can\n\
-    continue editing your current plan by choosing option 1."
+    or let it calculate the metrics you need for each muscle group to help\n\
+    you in the design process.\n\n\
+    The data will be saved to a google sheet for your later review, and you\n\
+    can continue editing your current plan by choosing option 1."
     return get_message(message)
 
 
@@ -84,6 +85,7 @@ def color_error_message(message):
     """
     return colored(message, 'white', 'on_red')
 
+
 def check_input(user_input, requirements_list):
     """
     This function takes in the user_input and a list of requirements
@@ -93,11 +95,11 @@ def check_input(user_input, requirements_list):
     """
     error_message = ''
     for req in requirements_list:
-        if req == 'can skip': # user can skip entering some values
+        if req == 'can skip':  # user can skip entering some values
             if user_input == '':
                 break
 
-        elif req == 'name': # names must be at least 4 chars long
+        elif req == 'name':  # names must be at least 4 chars long
             try:
                 if len(user_input) < 4:
                     raise ValueError
@@ -125,17 +127,21 @@ def check_input(user_input, requirements_list):
                 error_message = color_error_message(error_message)
                 break
 
-        # Allows the user to choose a number only from the available options list
-        elif type(req) == tuple and (user_input < req[0] or user_input > req[1]):
-            error_message = f'\nPlease enter a value between {req[0]} and {req[1]}.'
+        # user can choose a number only from the available options list
+        elif (
+            type(req) == tuple and
+            (user_input < req[0] or user_input > req[1])
+        ):
+            error_message = f'\nPlease enter a value between\
+            {req[0]} and {req[1]}.'
             error_message = color_error_message(error_message)
             break
 
-        elif req == 'yes or no': # for yes or no answers
+        elif req == 'yes or no':  # for yes or no answers
             try:
                 user_input = user_input.lower()
-                if len(user_input) > 3: # random strings that might contain yes or no are not valid
-                    raise ValueError                
+                if len(user_input) > 3:  # random strings are not valid
+                    raise ValueError
                 elif user_input.find('yes') > -1:
                     user_input = 'yes'
                 elif user_input.find('no') > -1:
@@ -148,7 +154,7 @@ def check_input(user_input, requirements_list):
                 break
 
         # validate that the user has entered exactly three numbers
-        elif req == 'cadence': # input format required '2 4 5' or e.g. '2,4, 5'
+        elif req == 'cadence':  # input format required e.g. '2 4 5'
             user_input, error_message = get_cadence_values(user_input)
             if error_message:
                 break
@@ -158,7 +164,7 @@ def check_input(user_input, requirements_list):
 
 def get_cadence_values(user_input):
     """
-    This function expects three numbers separated by commas or spaces or both 
+    This function expects three numbers separated by commas or spaces or both
     as they should be entered by the user. If these criteria are not met,
     an appropriate error message is presented.
     """
@@ -169,21 +175,23 @@ def get_cadence_values(user_input):
     for element in space_free_list:
         comma_free_list = element.split(',')
         for el in comma_free_list:
-            if el: # ignore empty strings '' separated after the commas
+            if el:  # ignore empty strings '' separated after the commas
                 try:
                     el = int(el)
-                except:
+                except ValueError:
                     try:
                         el = float(el)
-                    except:
-                        error_message = color_error_message('\nPlease enter numbers only')
+                    except ValueError:
+                        error_message = color_error_message(
+                            '\nPlease enter numbers only'
+                        )
                         return user_input, error_message
                 nums.append(el)
     if len(nums) != 3:
         error_message = color_error_message('\nPlease enter three numbers')
     else:
         user_input = nums
-    
+
     return user_input, error_message
 
 
@@ -212,32 +220,32 @@ def create_training_plan():
     """
     global training_plan
 
-    if training_plan != {}: # in case user has already created a training plan
-        message = "You have already created a plan. Do you want to edit it or replace it?\nPlease choose an option:\n1. Add exercises to current training plan.\n2. Delete current plan and create a new one."
+    if training_plan != {}:  # in case user has already created a training plan
+        message = "You have already created a plan. Do you want to edit it or \
+        replace it?\nPlease choose an option:\n1. Add exercises to current \
+        training plan.\n2. Delete current plan and create a new one."
         user_input = get_user_input(message, ['positive integer', (1, 2)])
-        if user_input == 1: # continue modifying current plan
+        if user_input == 1:  # continue modifying current plan
             pass
-        else: # delete old plan and create a new one
+        else:  # delete old plan and create a new one
             training_plan = {}
 
     # construct muscle group objects and/or add exercises by prompting the user
     while True:
         group = get_group(training_plan)
         group.add_exercise(get_exercise())
-        training_plan[group.name] = group # add new group to dictionary
+        training_plan[group.name] = group  # add new group to dictionary
 
         """
         Continue looping to add more exercises until user is done.
         """
-        message = "Do you want to add another exercise? Please type 'yes' or 'no'"
+        message = "Do you want to add another exercise? \
+        Please type 'yes' or 'no'"
         user_input = get_user_input(message, ['yes or no'])
         if user_input == 'no':
             break
-    # choice: add another row?
-    # choice: same group / different group?
-    # if different group -> choose an existent group or enter a new one
 
-    return 
+    return
 
 
 def get_group(training_plan):
@@ -246,7 +254,7 @@ def get_group(training_plan):
     for exercises in a muscle group. If other MuscleGroup objects already exist, ask
     the user to choose from them or to create a new muscle group.
     """
-    if training_plan != {}: # other MuscleGroup objects already exist
+    if training_plan != {}:  # other MuscleGroup objects already exist
         i = 1
         group_names = []
         message = 'Choose an option to enter a new muscle group or use an exsistent one:\n'
@@ -256,16 +264,16 @@ def get_group(training_plan):
             group_names.append(group_name)
             message += f'\n{i}. {group_name}'
         user_input = get_user_input(message, ['positive integer', (1, i)])
-        if user_input == 1: # user chooses to create a new muscle group
+        if user_input == 1:  # user chooses to create a new muscle group
             group = MuscleGroup()
             group.get_name()
             # if user enters name of a group that already exists, let them know and use it instead
             if training_plan.get(group.name) != None:
                 print(f'\nYou have already entered this muscle group!\nWill be adding the exercise to it :)\nChosen muscle group: {group.name}')
                 group = training_plan[group.name]
-        else: # user chooses to use a muscle group that already exists
+        else:  # user chooses to use a muscle group that already exists
             group = training_plan[group_names[user_input-2]]
-    else: # in case no muscle group has been created before just create a new one
+    else:  # in case no muscle group has been created before just create a new one
         group = MuscleGroup()
         group.get_name()
     return group
@@ -296,24 +304,24 @@ class MuscleGroup():
     """
     def __init__(self):
         self.name = ''
-        self.exercises = {} # each object contains a dictionary of exercises
-  
+        self.exercises = {}  # each object contains a dictionary of exercises
+
     def get_name(self):
         message = 'Enter name of the muscle group\n(e.g. Biceps, Chest, Abs)'
         self.name = get_user_input(message, ['name'])
-  
+
     def add_exercise(self, exercise):
         self.exercises[exercise.name] = exercise
-  
+
     def calc_metrics(self):
         """
         A method to calculate volume of the muscle group.
         """
         volume = 0
-        tut = 0 # stands for 'time under tension': time during which the muscles are under tension
-        exercise_time = 0 # total time of exercise
-        total_reps = 0 # to get total number of repetitions in an exercise
-        rest_time = 0 # time of resting after each exercises
+        tut = 0  # stands for 'time under tension': time during which the muscles are under tension
+        exercise_time = 0  # total time of exercise
+        total_reps = 0  # to get total number of repetitions in an exercise
+        rest_time = 0  # time of resting after each exercises
         for exercise in self.exercises.values():
             for rnw in exercise.reps_and_weights:
                 volume += rnw[0]*rnw[1]
@@ -323,7 +331,7 @@ class MuscleGroup():
                 exercise_time = tut + (total_reps * exercise.cadence[1])
             if exercise.rest != '':
                 rest_time += exercise.rest
-        group_time = exercise_time + rest_time # total duration of training in this group
+        group_time = exercise_time + rest_time  # total duration of training in this group
 
         return volume, tut, group_time
 
@@ -348,7 +356,7 @@ class Exercise():
         message = 'How many sets?'
         self.sets = get_user_input(message, ['positive integer', 'minimum 1'])
 
-    def get_reps_and_weights(self): # get data for repetitions and weight for each set
+    def get_reps_and_weights(self):  # get data for repetitions and weight for each set
         for set in range(self.sets):
             message = f'How many repetitions (Reps) in set Nr. {set+1}'
             reps = get_user_input(message, ['positive integer', 'minimum 1'])
@@ -362,7 +370,7 @@ class Exercise():
         cadence = get_user_input(message, ['can skip', 'cadence'])
         if cadence != '':
             self.cadence = cadence
-    
+
     # Get the resting duration after the exercise set in seconds
     def get_rest(self):
         message = 'Please enter the resting duration after each set in seconds?\n\nYou can skip this value by pressing enter instead.'
@@ -379,7 +387,7 @@ def print_training_plan():
     """
     global training_plan
 
-    most_sets = 0 # will register the highest number of sets in order to set all rows to equal lengths
+    most_sets = 0  # will register the highest number of sets in order to set all rows to equal lengths
     cadence = False
     rest = False
     """
@@ -387,9 +395,9 @@ def print_training_plan():
     whether cadence and rest variables were entered by the user. We will use this
     information to set equal row lengths for all exercises.
     """
-    for group in training_plan.values(): # training_plan is a dictionary containing the muscle_group objects
-        for exercise in group.exercises.values(): # group.exercises is a dict containing the exercise objects
-            if exercise.sets > most_sets: # get the highest number of sets
+    for group in training_plan.values():  # training_plan is a dictionary containing the muscle_group objects
+        for exercise in group.exercises.values():  # group.exercises is a dict containing the exercise objects
+            if exercise.sets > most_sets:  # get the highest number of sets
                 most_sets = exercise.sets
             if exercise.cadence !=[]:
                 cadence = True
@@ -430,8 +438,8 @@ def print_training_plan():
     sheet_row = []
     table_row = []
     table_rows = []
-    for group in training_plan.values(): # training_plan is a dictionary containing the muscle_group objects
-        for exercise in group.exercises.values(): # group.exercises is a dict containing the exercise objects
+    for group in training_plan.values():  # training_plan is a dictionary containing the muscle_group objects
+        for exercise in group.exercises.values():  # group.exercises is a dict containing the exercise objects
             sheet_row.extend([group.name, exercise.name, exercise.sets])
             table_row.extend([group.name, exercise.name, exercise.sets])
             # Add all Reps and Weight columns to sheet
@@ -455,10 +463,10 @@ def print_training_plan():
                 else:
                     sheet_row.append('--')
                     table_row.append('--')
-            SHEET.worksheet('Training Table').append_row(sheet_row) # add row to google sheet
+            SHEET.worksheet('Training Table').append_row(sheet_row)  # add row to google sheet
             table_rows.append(table_row)
-            sheet_row = [] # reset sheet_row for the next exercise
-            table_row = [] # reset table_row for the next exercise
+            sheet_row = []  # reset sheet_row for the next exercise
+            table_row = []  # reset table_row for the next exercise
 
     # create table for terminal
     table = tabulate(table_rows, headers = table_headers, tablefmt = "fancy_grid", stralign = ("center"), numalign = ("center"))
@@ -477,27 +485,26 @@ def print_calculated_values():
     also saved to google sheet.
     """
     worksheet = 'Training Metrics'
-    SHEET.worksheet(worksheet).clear() # clear worksheet
+    SHEET.worksheet(worksheet).clear()  # clear worksheet
     sheet_headers = ["Muscle\nGroup", "Volume\n(kg)", "Time Under\nTension (s)"]
     table_headers = ["Muscle\nGroup", "Volume\n(kg)", "Time Under\nTension (s)"]
-    SHEET.worksheet(worksheet).append_row(sheet_headers) # add headers row to google sheet
+    SHEET.worksheet(worksheet).append_row(sheet_headers)  # add headers row to google sheet
 
     sheet_row = []
     table_rows = []
-    tot_session_time = 0 # total duration of training session
+    tot_session_time = 0  # total duration of training session
     for group in training_plan.values():
         volume, tut, group_time = group.calc_metrics()
         tot_session_time += group_time
         sheet_row.extend([group.name, volume, tut])
         table_rows.append([group.name, volume, tut])
-        SHEET.worksheet(worksheet).append_row(sheet_row) # add row to google sheet
-        sheet_row = [] # reset sheet_row for next row in google sheet
+        SHEET.worksheet(worksheet).append_row(sheet_row)  # add row to google sheet
+        sheet_row = []  # reset sheet_row for next row in google sheet
     table = tabulate(table_rows, headers = table_headers, tablefmt = "fancy_grid", stralign = ("center"), numalign = ("center"))
     print(f'\n{table}')
     print(f'\nTotal Duration Of Training: {tot_session_time}(s)')
     print(f'\nYou can also view this table in google sheet:\n{sheet_tinyurl} -> worksheet: "Training Metrics"')
     return
-
 
 
 def main_menu():
@@ -511,20 +518,20 @@ def main_menu():
     while True:
         global training_plan
 
-        message = main_menu_message() # print main menu options to the user
+        message = main_menu_message()  # print main menu options to the user
         # get user's choice as a number: 1, 2 or 3
         user_input = get_user_input(message, ['positive integer', (1, 3)])
-        if user_input == 1: # option create training plan
+        if user_input == 1:  # option create training plan
             create_training_plan()
             print('\nThank you for your participation!')
-        elif user_input == 2: # option print out current plan
-            if training_plan == {}: # in case no plan has been created
+        elif user_input == 2:  # option print out current plan
+            if training_plan == {}:  # in case no plan has been created
                 message = "\nSorry, you didn't create a training plan yet!"
                 print(color_error_message(message))
             else:
                 print_training_plan()
-        elif user_input == 3: # option print out training metrics
-            if training_plan == {}: # in case no plan has been created
+        elif user_input == 3:  # option print out training metrics
+            if training_plan == {}:  # in case no plan has been created
                 message = "\nSorry, you didn't create a training plan yet!"
                 print(color_error_message(message))
             else:
