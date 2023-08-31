@@ -52,7 +52,7 @@ def welcome_message():
     of the user's interaction with the app. It explains the purpose
     of the app and how to interact with it.
     """
-    message = "Welcome To Muscle Gains!\n\n\
+    message = " Welcome To Muscle Gains!\n\n\
     This application is meant for a training instructor.\n\
     It will help you design training plans for your customers.\n\n\
     The app will guide you to enter the required data for each exercise:\n\
@@ -69,10 +69,10 @@ def main_menu_message():
     """
     Return the main menu options text that will be printed for the user.
     """
-    message = 'Please choose an option:\n\
+    message = ' Please choose an option:\n\
     1. Create a training plan\n\
     2. Display current training plan\n\
-    3. Display calculated values'
+    3. Display calculated metrics'
 
     return message
 
